@@ -1,7 +1,7 @@
-import type { flightType } from "./flightType"
+import type { flightType } from './flightType';
 
 export type tableType = {
-  isLoading: boolean
-  heads: string[]
-  rows: flightType[]
-}
+    isLoading: boolean;
+    heads: string[];
+    rows: flightType[];
+};

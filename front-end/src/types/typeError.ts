@@ -1,3 +1,3 @@
 export type typeError = {
-  pageOfError: string
-}
+    pageOfError: string;
+};
