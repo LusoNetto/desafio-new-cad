@@ -24,7 +24,7 @@ const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
 
   const hasBookmark = (flightId: number) => {
     const bookmarksObject = JSON.parse(bookmarks);
-    return !(bookmarksObject[flightId] !== 0 && (bookmarksObject[flightId] === null || bookmarksObject[flightId] === undefined))
+    return typeof bookmarksObject[flightId] === "number" && (bookmarksObject[flightId] === null || bookmarksObject[flightId] === undefined)
   }
 
   return (
@@ -53,7 +53,7 @@ const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
                     <td>{new Date(departureDateTime).toLocaleDateString()}</td>
                     <td>{new Date(arrivalDateTime).toLocaleDateString()}</td>
                     <td>{price}</td>
-                    {!hasBookmark(flightNumber) ? <td></td> : <td>Favoritado</td>}
+                    {!hasBookmark(id) ? <td></td> : <td>Favoritado</td>}
                     <td><button onClick={() => {
                       return toggleFavoriteFlight(id);
                     }}>Favoritar</button></td>
