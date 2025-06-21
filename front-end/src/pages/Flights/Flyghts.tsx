@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import Table from "../../components/Table";
+import FlightsTable from "../../components/FlightsTable/FlightsTable";
 import Error from "../Error/Error";
 import type { flightType } from "../../types/flightType";
 import { convertDataBaseDateToFormDate } from "../../utils/dateConverter";
 
 const Flights = () => {
   const [flights, setFlights] = useState([]);
-  const [isLoading, setIsloading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [hasErrorApi, setHasErrorApi] = useState(false);
   const [flightFilterForm, setFlightFilterForm] = useState({
     origin: "São Paulo",
-    destination: "Bahia",
+    destination: "São Paulo",
     departureDateTime: ""
   });
 
@@ -31,7 +31,7 @@ const Flights = () => {
     api
       .get("/flights")
       .then((response) => {
-        setIsloading(false);
+        setIsLoading(false);
         setFlights(response.data)
       })
       .catch((err) => {
@@ -40,19 +40,30 @@ const Flights = () => {
       });
   }, []);
 
-  const handleFilterFlightsSubmit = (e: React.SyntheticEvent) => {
+  const handleFilterFlightsSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const filteredFlights = flights.filter((flight : flightType) => flight.origin === flightFilterForm.origin && flight.destination === flightFilterForm.destination && convertDataBaseDateToFormDate(flight.departureDateTime) === flightFilterForm.departureDateTime)
-    setFlights(filteredFlights);
+    setIsLoading(true);
+    await api
+      .get("/flights")
+      .then((response) => {
+        setIsLoading(false);
+        const returnedFights = response.data;
+        const filteredFlights = returnedFights.filter((flight: flightType) => flight.origin === flightFilterForm.origin && flight.destination === flightFilterForm.destination && convertDataBaseDateToFormDate(flight.departureDateTime) === flightFilterForm.departureDateTime)
+        setFlights(filteredFlights);
+      })
+      .catch((err) => {
+        setHasErrorApi(true);
+        console.error("error:" + err);
+      });
   }
 
   return (
     <>
-      <h1>Flights</h1>
       {
         !hasErrorApi ?
           (
             <>
+              <h1>Flights</h1>
               <form onSubmit={handleFilterFlightsSubmit}>
                 <label>
                   Origem:
@@ -60,7 +71,9 @@ const Flights = () => {
                     name="origem"
                     onChange={(e) =>
                       setFlightFilterForm((prev) => ({ ...prev, origin: e.target.value }))
-                    }>
+                    }
+                    defaultValue="São Paulo"
+                  >
                     <option value="São Paulo">São Paulo</option>
                     <option value="Minas Gerais">Minas Gerais</option>
                     <option value="Espirito Santo">Espirito Santo</option>
@@ -73,7 +86,9 @@ const Flights = () => {
                     name="destino"
                     onChange={(e) =>
                       setFlightFilterForm((prev) => ({ ...prev, destination: e.target.value }))
-                    }>
+                    }
+                    defaultValue="São Paulo"
+                  >
                     <option value="São Paulo">São Paulo</option>
                     <option value="Minas Gerais">Minas Gerais</option>
                     <option value="Espirito Santo">Espirito Santo</option>
@@ -85,14 +100,14 @@ const Flights = () => {
                   <input
                     type="date"
                     name="data"
-                    onChange={(e) =>{
-                      setFlightFilterForm((prev) => ({ ...prev, departureDateTime: e.target.value }))}}
+                    onChange={(e) => {
+                      setFlightFilterForm((prev) => ({ ...prev, departureDateTime: e.target.value }))
+                    }}
                   />
                 </label>
                 <input type="submit" value="Filtrar" />
               </form>
-
-              <Table heads={heads} isLoading={isLoading} rows={flights} />
+              <FlightsTable heads={heads} isLoading={isLoading} rows={flights} />
             </>
           ) :
           (

@@ -1,13 +1,14 @@
-import type { flightType } from "../types/flightType";
-import type { tableType } from "../types/tableType";
-import Loading from "./Loading";
+import type { flightType } from "../../types/flightType";
+import type { tableType } from "../../types/tableType";
+import Loading from "../Loading/Loading";
 
-const Table = ({ isLoading, heads, rows }: tableType) => {
+const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
   return (
     <>
       {isLoading ? (
         <Loading />
-      ) : (
+      ) : !rows.length ? <p>nenhum resultado</p>
+        : (
         <table>
           <thead>
             <tr>
@@ -41,4 +42,4 @@ const Table = ({ isLoading, heads, rows }: tableType) => {
   )
 }
 
-export default Table;
+export default FlightsTable;
