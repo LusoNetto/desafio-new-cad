@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { tableType } from "../../types/flightsTableType";
 import type { flightType } from "../../types/flightType";
 import Loading from "../Loading/Loading";
