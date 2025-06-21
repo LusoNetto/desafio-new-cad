@@ -14,7 +14,7 @@
     "flightNumber": 1,
     "company": "Airlines",
     "origin": "São Paulo",
-    "destination": "Bahia",
+    "destination": "Minas Gerais",
     "departureDateTime": "2025-06-01",
     "arrivalDateTime": "2025-06-02",
     "price": 4000

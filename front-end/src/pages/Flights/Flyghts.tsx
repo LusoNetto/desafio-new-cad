@@ -15,6 +15,8 @@ const Flights = () => {
     departureDateTime: ""
   });
 
+  const [flightSearchForm, setFlightSearchForm] = useState("");
+
   const heads = [
     "Número do voo",
     "Companhia",
@@ -49,6 +51,33 @@ const Flights = () => {
         setIsLoading(false);
         const returnedFights = response.data;
         const filteredFlights = returnedFights.filter((flight: flightType) => flight.origin === flightFilterForm.origin && flight.destination === flightFilterForm.destination && convertDataBaseDateToFormDate(flight.departureDateTime) === flightFilterForm.departureDateTime)
+        setFlights(filteredFlights);
+      })
+      .catch((err) => {
+        setHasErrorApi(true);
+        console.error("error:" + err);
+      });
+  }
+
+  const handleSearchFlightsSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    console.log(flightSearchForm);
+    await api
+      .get("/flights")
+      .then((response) => {
+        setIsLoading(false);
+        const returnedFights = response.data;
+        const filteredFlights = returnedFights.filter((flight: flightType) => {
+          return (
+            flight.flightNumber.toString() === flightSearchForm ||
+            flight.company.toString() === flightSearchForm ||
+            flight.origin.toString() === flightSearchForm ||
+            flight.destination.toString() === flightSearchForm ||
+            flight.departureDateTime.toString() === flightSearchForm ||
+            flight.price.toString() === flightSearchForm
+          )
+        });
         setFlights(filteredFlights);
       })
       .catch((err) => {
@@ -106,6 +135,19 @@ const Flights = () => {
                   />
                 </label>
                 <input type="submit" value="Filtrar" />
+              </form>
+              <form onSubmit={handleSearchFlightsSubmit}>
+                <label>
+                  Pesquisar:
+                  <input
+                    name="pesquisar"
+                    onChange={(e) =>
+                      setFlightSearchForm(() => (e.target.value))
+                    }
+                    placeholder="Digite aqui..."
+                  />
+                </label>
+                <input type="submit" value="Pesquisar" />
               </form>
               <FlightsTable heads={heads} isLoading={isLoading} rows={flights} />
             </>
