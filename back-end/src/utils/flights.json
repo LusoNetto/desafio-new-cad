@@ -4,19 +4,19 @@
     "flightNumber": 0,
     "company": "Airlines",
     "origin": "São Paulo",
-    "destination": "Rio Grande do Sul",
-    "departureTime": "2025-06-01T00:00:00.000Z",
-    "arrival": "2025-06-02T00:00:00.000Z",
+    "destination": "Bahia",
+    "departureDateTime": "2025-06-01",
+    "arrivalDateTime": "2025-06-02",
     "price": 3000
   },
   {
-    "id": 0,
-    "flightNumber": 0,
+    "id": 1,
+    "flightNumber": 1,
     "company": "Airlines",
-    "origin": "Sergipe",
-    "destination": "Rio de Janeiro",
-    "departureTime": "2025-06-01T00:00:00.000Z",
-    "arrival": "2025-06-02T00:00:00.000Z",
+    "origin": "São Paulo",
+    "destination": "Bahia",
+    "departureDateTime": "2025-06-01",
+    "arrivalDateTime": "2025-06-02",
     "price": 4000
   }
 ]
