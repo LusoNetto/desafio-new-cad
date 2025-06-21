@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import FlightsTable from "../../components/FlightsTable/FlightsTable";
+import BookmarksTable from "../../components/BookmarksTable/BookmarksTable";
 import Error from "../Error/Error";
 import type { flightType } from "../../types/flightType";
 import { convertDataBaseDateToFormDate } from "../../utils/dateConverter";
 
-const Flights = () => {
-  const [flights, setFlights] = useState([]);
+const Bookmarks = () => {
+  const [bookmarks, setBookmarks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasErrorApi, setHasErrorApi] = useState(false);
-  const [flightFilterForm, setFlightFilterForm] = useState({
+  const [bookmarkFilterForm, setBookmarkFilterForm] = useState({
     origin: "São Paulo",
     destination: "São Paulo",
     departureDateTime: ""
   });
 
-  const [flightSearchForm, setFlightSearchForm] = useState("");
+  const [bookmarkSearchForm, setBookmarkSearchForm] = useState("");
 
   const heads = [
     "Número do voo",
@@ -25,7 +25,6 @@ const Flights = () => {
     "Partida",
     "Chegada",
     "Preco",
-    "Favorito",
     ""
   ]
 
@@ -34,7 +33,7 @@ const Flights = () => {
       .get("/flights")
       .then((response) => {
         setIsLoading(false);
-        setFlights(response.data)
+        setBookmarks(response.data)
       })
       .catch((err) => {
         setHasErrorApi(true);
@@ -42,7 +41,7 @@ const Flights = () => {
       });
   }, []);
 
-  const handleFilterFlightsSubmit = async (e: React.SyntheticEvent) => {
+  const handleFilterBookmarksSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setIsLoading(true);
     await api
@@ -50,8 +49,8 @@ const Flights = () => {
       .then((response) => {
         setIsLoading(false);
         const returnedFights = response.data;
-        const filteredFlights = returnedFights.filter((flight: flightType) => flight.origin === flightFilterForm.origin && flight.destination === flightFilterForm.destination && convertDataBaseDateToFormDate(flight.departureDateTime) === flightFilterForm.departureDateTime)
-        setFlights(filteredFlights);
+        const filteredBookmarks = returnedFights.filter((bookmark: flightType) => bookmark.origin === bookmarkFilterForm.origin && bookmark.destination === bookmarkFilterForm.destination && convertDataBaseDateToFormDate(bookmark.departureDateTime) === bookmarkFilterForm.departureDateTime)
+        setBookmarks(filteredBookmarks);
       })
       .catch((err) => {
         setHasErrorApi(true);
@@ -59,7 +58,7 @@ const Flights = () => {
       });
   }
 
-  const handleSearchFlightsSubmit = async (e: React.SyntheticEvent) => {
+  const handleSearchBookmarksSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setIsLoading(true);
     await api
@@ -67,17 +66,17 @@ const Flights = () => {
       .then((response) => {
         setIsLoading(false);
         const returnedFights = response.data;
-        const filteredFlights = returnedFights.filter((flight: flightType) => {
+        const filteredBookmarks = returnedFights.filter((bookmark: flightType) => {
           return (
-            flight.flightNumber.toString() === flightSearchForm ||
-            flight.company.toString() === flightSearchForm ||
-            flight.origin.toString() === flightSearchForm ||
-            flight.destination.toString() === flightSearchForm ||
-            flight.departureDateTime.toString() === flightSearchForm ||
-            flight.price.toString() === flightSearchForm
+            bookmark.flightNumber.toString() === bookmarkSearchForm ||
+            bookmark.company.toString() === bookmarkSearchForm ||
+            bookmark.origin.toString() === bookmarkSearchForm ||
+            bookmark.destination.toString() === bookmarkSearchForm ||
+            bookmark.departureDateTime.toString() === bookmarkSearchForm ||
+            bookmark.price.toString() === bookmarkSearchForm
           )
         });
-        setFlights(filteredFlights);
+        setBookmarks(filteredBookmarks);
       })
       .catch((err) => {
         setHasErrorApi(true);
@@ -92,7 +91,7 @@ const Flights = () => {
       .get("/flights")
       .then((response) => {
         setIsLoading(false);
-        setFlights(response.data);
+        setBookmarks(response.data);
       })
       .catch((err) => {
         setHasErrorApi(true);
@@ -106,14 +105,14 @@ const Flights = () => {
         !hasErrorApi ?
           (
             <>
-              <h1>Flights</h1>
-              <form onSubmit={handleFilterFlightsSubmit}>
+              <h1>Bookmarks</h1>
+              <form onSubmit={handleFilterBookmarksSubmit}>
                 <label>
                   Origem:
                   <select
                     name="origem"
                     onChange={(e) =>
-                      setFlightFilterForm((prev) => ({ ...prev, origin: e.target.value }))
+                      setBookmarkFilterForm((prev) => ({ ...prev, origin: e.target.value }))
                     }
                     defaultValue="São Paulo"
                   >
@@ -128,7 +127,7 @@ const Flights = () => {
                   <select
                     name="destino"
                     onChange={(e) =>
-                      setFlightFilterForm((prev) => ({ ...prev, destination: e.target.value }))
+                      setBookmarkFilterForm((prev) => ({ ...prev, destination: e.target.value }))
                     }
                     defaultValue="São Paulo"
                   >
@@ -144,23 +143,23 @@ const Flights = () => {
                     type="date"
                     name="data"
                     onChange={(e) => {
-                      setFlightFilterForm((prev) => ({ ...prev, departureDateTime: e.target.value }))
+                      setBookmarkFilterForm((prev) => ({ ...prev, departureDateTime: e.target.value }))
                     }}
                   />
                 </label>
                 <input
                   type="submit"
                   value="Filtrar"
-                  disabled={!flightFilterForm.origin || !flightFilterForm.destination || !flightFilterForm.departureDateTime}
+                  disabled={!bookmarkFilterForm.origin || !bookmarkFilterForm.destination || !bookmarkFilterForm.departureDateTime}
                 />
               </form>
-              <form onSubmit={handleSearchFlightsSubmit}>
+              <form onSubmit={handleSearchBookmarksSubmit}>
                 <label>
                   Pesquisar:
                   <input
                     name="pesquisar"
                     onChange={(e) =>
-                      setFlightSearchForm(() => (e.target.value))
+                      setBookmarkSearchForm(() => (e.target.value))
                     }
                     placeholder="Digite aqui..."
                   />
@@ -168,20 +167,20 @@ const Flights = () => {
                 <input
                   type="submit"
                   value="Pesquisar"
-                  disabled={!flightSearchForm}
+                  disabled={!bookmarkSearchForm}
                 />
               </form>
               <button onClick={handleClearSearch}>Limpar pesquisa</button>
               <br />
-              <FlightsTable heads={heads} isLoading={isLoading} rows={flights} />
+              <BookmarksTable heads={heads} isLoading={isLoading} rows={bookmarks} />
             </>
           ) :
           (
-            <Error pageOfError="Flights" />
+            <Error pageOfError="Bookmarks" />
           )
       }
     </>
   );
 };
 
-export default Flights;
+export default Bookmarks;
