@@ -54,9 +54,7 @@ const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
                     <td>{new Date(arrivalDateTime).toLocaleDateString()}</td>
                     <td>{price}</td>
                     {!hasBookmark(id) ? <td></td> : <td>Favoritado</td>}
-                    <td><button onClick={() => {
-                      return toggleFavoriteFlight(id);
-                    }}>Favoritar</button></td>
+                    <td><button onClick={() => toggleFavoriteFlight(id)}>Favoritar</button></td>
                   </tr>)
               })
               }
