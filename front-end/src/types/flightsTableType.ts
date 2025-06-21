@@ -1,4 +1,4 @@
-import type { flightType } from "../types/flightType"
+import type { flightType } from "./flightType"
 
 export type tableType = {
   isLoading: boolean

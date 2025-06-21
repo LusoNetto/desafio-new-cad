@@ -1,5 +1,5 @@
 import type { flightType } from "../../types/flightType";
-import type { tableType } from "../../types/tableType";
+import type { tableType } from "../../types/flightsTableType";
 import Loading from "../Loading/Loading";
 
 const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
