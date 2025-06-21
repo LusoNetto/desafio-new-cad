@@ -5,8 +5,8 @@
     "company": "Airlines",
     "origin": "São Paulo",
     "destination": "Bahia",
-    "departureDateTime": "2025-06-01",
-    "arrivalDateTime": "2025-06-02",
+    "departureDateTime": "2025-06-05",
+    "arrivalDateTime": "2025-06-06",
     "price": 3000
   },
   {
@@ -15,8 +15,8 @@
     "company": "Airlines",
     "origin": "São Paulo",
     "destination": "Minas Gerais",
-    "departureDateTime": "2025-06-01",
-    "arrivalDateTime": "2025-06-02",
+    "departureDateTime": "2025-06-12",
+    "arrivalDateTime": "2025-06-13",
     "price": 4000
   }
 ]
