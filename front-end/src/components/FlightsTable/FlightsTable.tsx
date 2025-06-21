@@ -1,42 +1,68 @@
+import { useState } from "react";
 import type { flightType } from "../../types/flightType";
 import type { tableType } from "../../types/flightsTableType";
 import Loading from "../Loading/Loading";
 
 const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
+
+  const [bookmarks, setBookmarks] = useState(localStorage.getItem("bookmarks") || "{}")
+
+  const toggleFavoriteFlight = (flightId: number) => {
+    const bookmarksObject = JSON.parse(bookmarks);
+    if (bookmarksObject[flightId] !== 0 && (bookmarksObject[flightId] === null || bookmarksObject[flightId] === undefined)) {
+      console.log("Não tinha bookmarksObject[",flightId,"]");
+      bookmarksObject[flightId] = flightId;
+    } else {
+      console.log("Tinha bookmarksObject[",flightId,"]");
+      delete bookmarksObject[flightId]
+    }
+    console.log("bookmarksObject: ", bookmarksObject);
+    const booksmarkUpdated = JSON.stringify(bookmarksObject);
+    localStorage.setItem("bookmarks", booksmarkUpdated);
+    setBookmarks(booksmarkUpdated);
+  }
+
+  const hasBookmark = (flightId: number) => {
+    const bookmarksObject = JSON.parse(bookmarks);
+    return !(bookmarksObject[flightId] !== 0 && (bookmarksObject[flightId] === null || bookmarksObject[flightId] === undefined))
+  }
+
   return (
     <>
       {isLoading ? (
         <Loading />
       ) : !rows.length ? <p>nenhum resultado</p>
         : (
-        <table>
-          <thead>
-            <tr>
-              {heads.map(head => {
-                return <th key={head}>{head}</th>
-              })}
-            </tr>
-          </thead>
-          <tbody>
+          <table>
+            <thead>
+              <tr>
+                {heads.map(head => {
+                  return <th key={head}>{head}</th>
+                })}
+              </tr>
+            </thead>
+            <tbody>
 
-            {rows.map(({ id, flightNumber, company, origin, destination, departureDateTime, arrivalDateTime, price }: flightType) => {
-              return (
-                <tr key={id}>
-                  <td>{flightNumber}</td>
-                  <td>{company}</td>
-                  <td>{origin}</td>
-                  <td>{destination}</td>
-                  <td>{new Date(departureDateTime).toLocaleDateString()}</td>
-                  <td>{new Date(arrivalDateTime).toLocaleDateString()}</td>
-                  <td>{price}</td>
-                  <td>Favoritado</td>
-                  <td><button>Favoritar</button></td>
-                </tr>)
-            })
-            }
-          </tbody>
-        </table>
-      )
+              {rows.map(({ id, flightNumber, company, origin, destination, departureDateTime, arrivalDateTime, price }: flightType) => {
+                return (
+                  <tr key={id}>
+                    <td>{flightNumber}</td>
+                    <td>{company}</td>
+                    <td>{origin}</td>
+                    <td>{destination}</td>
+                    <td>{new Date(departureDateTime).toLocaleDateString()}</td>
+                    <td>{new Date(arrivalDateTime).toLocaleDateString()}</td>
+                    <td>{price}</td>
+                    {!hasBookmark(flightNumber) ? <td></td> : <td>Favoritado</td>}
+                    <td><button onClick={() => {
+                      return toggleFavoriteFlight(id);
+                    }}>Favoritar</button></td>
+                  </tr>)
+              })
+              }
+            </tbody>
+          </table>
+        )
       }
     </>
   )
