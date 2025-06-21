@@ -85,6 +85,21 @@ const Flights = () => {
       });
   }
 
+  const handleClearSearch = async (e : React.SyntheticEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    await api
+      .get("/flights")
+      .then((response) => {
+        setIsLoading(false);
+        setFlights(response.data);
+      })
+      .catch((err) => {
+        setHasErrorApi(true);
+        console.error("error:" + err);
+      });
+  }
+
   return (
     <>
       {
@@ -156,6 +171,8 @@ const Flights = () => {
                   disabled={!flightSearchForm}
                 />
               </form>
+              <button onClick={handleClearSearch}>Limpar pesquisa</button>
+              <br />
               <FlightsTable heads={heads} isLoading={isLoading} rows={flights} />
             </>
           ) :
