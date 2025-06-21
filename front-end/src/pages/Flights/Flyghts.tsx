@@ -62,7 +62,6 @@ const Flights = () => {
   const handleSearchFlightsSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(flightSearchForm);
     await api
       .get("/flights")
       .then((response) => {
@@ -134,7 +133,11 @@ const Flights = () => {
                     }}
                   />
                 </label>
-                <input type="submit" value="Filtrar" />
+                <input
+                  type="submit"
+                  value="Filtrar"
+                  disabled={!flightFilterForm.origin || !flightFilterForm.destination || !flightFilterForm.departureDateTime}
+                />
               </form>
               <form onSubmit={handleSearchFlightsSubmit}>
                 <label>
@@ -147,7 +150,11 @@ const Flights = () => {
                     placeholder="Digite aqui..."
                   />
                 </label>
-                <input type="submit" value="Pesquisar" />
+                <input
+                  type="submit"
+                  value="Pesquisar"
+                  disabled={!flightSearchForm}
+                />
               </form>
               <FlightsTable heads={heads} isLoading={isLoading} rows={flights} />
             </>
