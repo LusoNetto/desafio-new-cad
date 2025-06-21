@@ -17,14 +17,14 @@ const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
       delete bookmarksObject[flightId]
     }
     console.log("bookmarksObject: ", bookmarksObject);
-    const booksmarkUpdated = JSON.stringify(bookmarksObject);
-    localStorage.setItem("bookmarks", booksmarkUpdated);
-    setBookmarks(booksmarkUpdated);
+    const bookmarksUpdated = JSON.stringify(bookmarksObject);
+    localStorage.setItem("bookmarks", bookmarksUpdated);
+    setBookmarks(bookmarksUpdated);
   }
 
-  const hasBookmark = (flightId: number) => {
+  const hasBookmark = (id: number) => {
     const bookmarksObject = JSON.parse(bookmarks);
-    return typeof bookmarksObject[flightId] === "number" && (bookmarksObject[flightId] === null || bookmarksObject[flightId] === undefined)
+    return typeof bookmarksObject[id] === "number" && (bookmarksObject[id] !== null || bookmarksObject[id] !== undefined)
   }
 
   return (
