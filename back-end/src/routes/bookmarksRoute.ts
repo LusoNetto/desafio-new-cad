@@ -6,7 +6,7 @@ const route = Router();
 route.get("/", async (req: Request, res: Response) => {
   try {
     const bookmarks: string | null = await client.get('bookmarks');
-    if(bookmarks) {
+    if (bookmarks) {
       res.status(200).send(JSON.parse(bookmarks));
     } else {
       res.status(200).send({});
@@ -17,29 +17,39 @@ route.get("/", async (req: Request, res: Response) => {
   }
 });
 
-route.post('/', async (req : Request, res : Response) => {
+route.post('/', async (req: Request, res: Response) => {
   try {
+    const flightId = req.body.flightId;
     if (
-      !req.body.flightId
+      !flightId
     ) {
       res.status(400).send({
         message: `Send all requestuire fields: flightId`,
       });
     };
-    const flightId = req.body.flightId;
+    if(typeof flightId !== "number"){
+      res.status(400).send({
+        message: `FlightId must be a number but is ${typeof flightId}`,
+      });
+    }
     const sevenDaysInSeconds = 604800;
     const bookmarks = await client.get('bookmarks');
-    console.log("bookmarks:", bookmarks);
     let bookmarksObject = {};
-    if(bookmarks){
+    if (bookmarks) {
       bookmarksObject = JSON.parse(bookmarks);
-      bookmarksObject[flightId] = flightId;
+      if (!bookmarksObject[flightId]) {
+        bookmarksObject[flightId] = flightId;
+      } else {
+        res.status(400).send({
+          message: `Bookmarks cache with id ${flightId} already created`,
+        });
+      }
     }
-    
+
     const bookmarksToCache = JSON.stringify(bookmarksObject);
 
     await client.set('bookmarks', bookmarksToCache, {
-        EX: sevenDaysInSeconds
+      EX: sevenDaysInSeconds
     });
 
     res.status(201).send(flightId);
@@ -49,22 +59,40 @@ route.post('/', async (req : Request, res : Response) => {
   }
 })
 
-// route.delete('/:id', async (req : Request, res : Response) => {
-//   try {
-//     const { id } = req.params;
+route.delete('/:flightId', async (req: Request, res: Response) => {
+  try {
+    const { flightId } = req.params;
 
-//     const result = await Book.findByIdAndDelete(id);
+    if (
+      !flightId
+    ) {
+      res.status(400).send({
+        message: `Send all requestuire params: flightId`,
+      });
+    };
 
-//     if (!result) {
-//       return res.status(404).json({ message: 'Book not found' });
-//     }
-
-//     return res.status(200).send({ message: 'Book deleted successfylly' });
-//   } catch (error) {
-//     console.log(error.message);
-//     res.status(500).send({ message: error.message });
-//   }
-// })
+    const bookmarks = await client.get('bookmarks');
+    let bookmarksObject = {};
+    if (bookmarks) {
+      bookmarksObject = JSON.parse(bookmarks);
+      const result = bookmarksObject[flightId];
+      if (result) {
+        delete bookmarksObject[flightId];
+        console.log(bookmarksObject);
+        const bookmarksToCache = JSON.stringify(bookmarksObject);
+        client.set('bookmarks', bookmarksToCache);
+        res.status(200).send({ message: 'Book deleted successfylly' });
+      } else {
+        res.status(404).json({ message: `Not found book with id ${flightId}` });
+      }
+    } else {
+      res.status(404).json({ message: 'bookmarks cache not found' });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+})
 
 
 
