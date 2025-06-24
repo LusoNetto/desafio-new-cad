@@ -40,7 +40,7 @@ const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
     api.get('/bookmarks').then((response) => {
       setBookmarks(JSON.stringify(response.data));
     });
-  }, []);
+  }, [bookmarks]);
 
   return (
     <>

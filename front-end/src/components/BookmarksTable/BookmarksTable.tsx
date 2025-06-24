@@ -13,13 +13,10 @@ const BookmarksTable = ({ isLoading, heads, rows }: tableType) => {
     const flightId = flightNumber.toString();
     const bookmarksObject = JSON.parse(bookmarks);
     if (
-      bookmarksObject[flightId] !== 0 &&
-      (bookmarksObject[flightId] === null ||
-        bookmarksObject[flightId] === undefined)
+      bookmarksObject[flightId] == 0 ||
+      (bookmarksObject[flightId] !== null &&
+        bookmarksObject[flightId] !== undefined)
     ) {
-      bookmarksObject[flightId] = flightId;
-      await api.post(`/bookmarks`, { flightId: flightId });
-    } else {
       delete bookmarksObject[flightId];
       await api.delete(`/bookmarks/${flightId}`);
     }
@@ -40,7 +37,7 @@ const BookmarksTable = ({ isLoading, heads, rows }: tableType) => {
     api.get('/bookmarks').then((response) => {
       setBookmarks(JSON.stringify(response.data));
     });
-  }, []);
+  }, [bookmarks]);
 
   return (
     <>
