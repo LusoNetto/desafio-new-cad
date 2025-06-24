@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
-import BookmarksTable from '../../components/BookmarksTable/BookmarksTable';
 import Error from '../Error/Error';
 import type { flightType } from '../../types/flightType';
 import { convertDataBaseDateToFormDate } from '../../utils/dateConverter';
+import Table from '../../components/Table/Table';
+import useFlight from '../../hooks/useFlight';
 
 const Bookmarks = () => {
-  const [bookmarks, setBookmarks] = useState([]);
+  const [flights, setFlights] = useState([]);
+  const [bookmarks, setBookmarks] = useState(
+    localStorage.getItem('bookmarks') || '{}'
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [hasErrorApi, setHasErrorApi] = useState(false);
   const [bookmarkFilterForm, setBookmarkFilterForm] = useState({
@@ -14,8 +18,9 @@ const Bookmarks = () => {
     destination: 'São Paulo',
     departureDateTime: '',
   });
-
   const [bookmarkSearchForm, setBookmarkSearchForm] = useState('');
+  
+  const {hasBookmark} = useFlight();
 
   const heads = [
     'Número do voo',
@@ -27,19 +32,6 @@ const Bookmarks = () => {
     'Preco',
     '',
   ];
-
-  useEffect(() => {
-    api
-      .get('/flights')
-      .then((response) => {
-        setIsLoading(false);
-        setBookmarks(response.data);
-      })
-      .catch((err) => {
-        setHasErrorApi(true);
-        console.error('error:' + err);
-      });
-  }, []);
 
   const handleFilterBookmarksSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -54,9 +46,9 @@ const Bookmarks = () => {
             bookmark.origin === bookmarkFilterForm.origin &&
             bookmark.destination === bookmarkFilterForm.destination &&
             convertDataBaseDateToFormDate(bookmark.departureDateTime) ===
-              bookmarkFilterForm.departureDateTime
+            bookmarkFilterForm.departureDateTime
         );
-        setBookmarks(filteredBookmarks);
+        setFlights(filteredBookmarks);
       })
       .catch((err) => {
         setHasErrorApi(true);
@@ -84,7 +76,7 @@ const Bookmarks = () => {
             );
           }
         );
-        setBookmarks(filteredBookmarks);
+        setFlights(filteredBookmarks);
       })
       .catch((err) => {
         setHasErrorApi(true);
@@ -99,13 +91,26 @@ const Bookmarks = () => {
       .get('/flights')
       .then((response) => {
         setIsLoading(false);
-        setBookmarks(response.data);
+        setFlights(response.data);
       })
       .catch((err) => {
         setHasErrorApi(true);
         console.error('error:' + err);
       });
   };
+
+  useEffect(() => {
+    api
+      .get('/flights')
+      .then((response) => {
+        setIsLoading(false);
+        setFlights(response.data.filter((row: flightType) => hasBookmark(row.id)));
+      })
+      .catch((err) => {
+        setHasErrorApi(true);
+        console.error('error:' + err);
+      });
+  }, [bookmarks]);
 
   return (
     <>
@@ -189,10 +194,12 @@ const Bookmarks = () => {
           </form>
           <button onClick={handleClearSearch}>Limpar pesquisa</button>
           <br />
-          <BookmarksTable
+          <Table
             heads={heads}
             isLoading={isLoading}
-            rows={bookmarks}
+            rows={flights}
+            bookmarks={bookmarks}
+            setBookmarks={setBookmarks}
           />
         </>
       ) : (

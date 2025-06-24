@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
-import FlightsTable from '../../components/FlightsTable/FlightsTable';
 import Error from '../Error/Error';
 import type { flightType } from '../../types/flightType';
 import { convertDataBaseDateToFormDate } from '../../utils/dateConverter';
+import Table from '../../components/Table/Table';
 
 const Flights = () => {
   const [flights, setFlights] = useState([]);
+  const [bookmarks, setBookmarks] = useState(
+    localStorage.getItem('bookmarks') || '{}'
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [hasErrorApi, setHasErrorApi] = useState(false);
   const [flightFilterForm, setFlightFilterForm] = useState({
@@ -28,19 +31,6 @@ const Flights = () => {
     'Favorito',
     '',
   ];
-
-  useEffect(() => {
-    api
-      .get('/flights')
-      .then((response) => {
-        setIsLoading(false);
-        setFlights(response.data);
-      })
-      .catch((err) => {
-        setHasErrorApi(true);
-        console.error('error:' + err);
-      });
-  }, []);
 
   const handleFilterFlightsSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -105,6 +95,19 @@ const Flights = () => {
         console.error('error:' + err);
       });
   };
+
+  useEffect(() => {
+    api
+      .get('/flights')
+      .then((response) => {
+        setIsLoading(false);
+        setFlights(response.data);
+      })
+      .catch((err) => {
+        setHasErrorApi(true);
+        console.error('error:' + err);
+      });
+  }, []);
 
   return (
     <>
@@ -188,7 +191,7 @@ const Flights = () => {
           </form>
           <button onClick={handleClearSearch}>Limpar pesquisa</button>
           <br />
-          <FlightsTable heads={heads} isLoading={isLoading} rows={flights} />
+          <Table heads={heads} isLoading={isLoading} rows={flights} bookmarks={bookmarks} setBookmarks={setBookmarks} />
         </>
       ) : (
         <Error pageOfError="Flights" />

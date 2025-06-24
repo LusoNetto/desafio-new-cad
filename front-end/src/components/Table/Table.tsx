@@ -2,12 +2,11 @@ import type { tableType } from '../../types/flightsTableType';
 import type { flightType } from '../../types/flightType';
 import Loading from '../Loading/Loading';
 import api from '../../services/api';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import useFlight from '../../hooks/useFlight';
 
-const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
-  const [bookmarks, setBookmarks] = useState(
-    localStorage.getItem('bookmarks') || '{}'
-  );
+const Table = ({ isLoading, heads, rows, bookmarks, setBookmarks }: tableType) => {
+  const { hasBookmark } = useFlight();
 
   const toggleFavoriteFlight = async (flightNumber: number) => {
     const flightId = flightNumber.toString();
@@ -26,14 +25,6 @@ const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
     const bookmarksUpdated = JSON.stringify(bookmarksObject);
     localStorage.setItem('bookmarks', bookmarksUpdated);
     setBookmarks(bookmarksUpdated);
-  };
-
-  const hasBookmark = (id: number) => {
-    const bookmarksObject = JSON.parse(bookmarks);
-    return (
-      typeof bookmarksObject[id] === 'string' &&
-      (bookmarksObject[id] !== null || bookmarksObject[id] !== undefined)
-    );
   };
 
   useEffect(() => {
@@ -75,16 +66,21 @@ const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
                     <td>{company}</td>
                     <td>{origin}</td>
                     <td>{destination}</td>
-                    <td>{new Date(departureDateTime).toLocaleDateString()}</td>
+                    <td>
+                      {new Date(departureDateTime).toLocaleDateString()}
+                    </td>
                     <td>{new Date(arrivalDateTime).toLocaleDateString()}</td>
                     <td>{price}</td>
-                    {!hasBookmark(id) ? <td></td> : <td>Favoritado</td>}
                     <td>
-                      <button
-                        onClick={() => toggleFavoriteFlight(flightNumber)}
-                      >
-                        Favoritar
-                      </button>
+                      {hasBookmark(flightNumber) ? (
+                        <button onClick={() => toggleFavoriteFlight(id)}>
+                          ⭐
+                        </button>
+                      ) : (
+                        <button onClick={() => toggleFavoriteFlight(id)}>
+                          Favoritar
+                        </button>
+                      )}
                     </td>
                   </tr>
                 );
@@ -97,4 +93,4 @@ const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
   );
 };
 
-export default FlightsTable;
+export default Table;
