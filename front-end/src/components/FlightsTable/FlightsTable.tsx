@@ -2,7 +2,7 @@ import type { tableType } from '../../types/flightsTableType';
 import type { flightType } from '../../types/flightType';
 import Loading from '../Loading/Loading';
 import api from '../../services/api';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
   const [bookmarks, setBookmarks] = useState(
@@ -11,9 +11,7 @@ const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
 
   const toggleFavoriteFlight = async (flightNumber: number) => {
     const flightId = flightNumber.toString();
-    const bookmarksObject =
-      (await api.get('/bookmarks').then((response) => response.data)) ||
-      JSON.parse(bookmarks);
+    const bookmarksObject = JSON.parse(bookmarks);
     if (
       bookmarksObject[flightId] !== 0 &&
       (bookmarksObject[flightId] === null ||
@@ -37,6 +35,12 @@ const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
       (bookmarksObject[id] !== null || bookmarksObject[id] !== undefined)
     );
   };
+
+  useEffect(() => {
+    api.get('/bookmarks').then((response) => {
+        setBookmarks(JSON.stringify(response.data))
+    })
+  }, [])
 
   return (
     <>
