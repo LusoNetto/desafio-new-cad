@@ -11,5 +11,5 @@ server.use(bodyParser.json());
 server.use('/api', app);
 
 server.listen(PORT, () => {
-    console.log('Back-end running on port', PORT);
+  console.log('Back-end running on port', PORT);
 });

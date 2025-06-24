@@ -1,62 +1,62 @@
 [
-    {
-        "id": 0,
-        "flightNumber": 0,
-        "company": "Airlines",
-        "origin": "São Paulo",
-        "destination": "Bahia",
-        "departureDateTime": "2025-06-05",
-        "arrivalDateTime": "2025-06-06",
-        "price": 3000
-    },
-    {
-        "id": 1,
-        "flightNumber": 1,
-        "company": "Airlines",
-        "origin": "São Paulo",
-        "destination": "Minas Gerais",
-        "departureDateTime": "2025-06-12",
-        "arrivalDateTime": "2025-06-13",
-        "price": 4000
-    },
-    {
-        "id": 2,
-        "flightNumber": 2,
-        "company": "Airlines",
-        "origin": "São Paulo",
-        "destination": "Minas Gerais",
-        "departureDateTime": "2025-06-12",
-        "arrivalDateTime": "2025-06-13",
-        "price": 4000
-    },
-    {
-        "id": 3,
-        "flightNumber": 3,
-        "company": "Airlines",
-        "origin": "São Paulo",
-        "destination": "Minas Gerais",
-        "departureDateTime": "2025-06-12",
-        "arrivalDateTime": "2025-06-13",
-        "price": 4000
-    },
-    {
-        "id": 4,
-        "flightNumber": 4,
-        "company": "Airlines",
-        "origin": "São Paulo",
-        "destination": "Minas Gerais",
-        "departureDateTime": "2025-06-12",
-        "arrivalDateTime": "2025-06-13",
-        "price": 4000
-    },
-    {
-        "id": 5,
-        "flightNumber": 5,
-        "company": "Airlines",
-        "origin": "São Paulo",
-        "destination": "Minas Gerais",
-        "departureDateTime": "2025-06-12",
-        "arrivalDateTime": "2025-06-13",
-        "price": 4000
-    }
+  {
+    "id": 0,
+    "flightNumber": 0,
+    "company": "Airlines",
+    "origin": "São Paulo",
+    "destination": "Bahia",
+    "departureDateTime": "2025-06-05",
+    "arrivalDateTime": "2025-06-06",
+    "price": 3000
+  },
+  {
+    "id": 1,
+    "flightNumber": 1,
+    "company": "Airlines",
+    "origin": "São Paulo",
+    "destination": "Minas Gerais",
+    "departureDateTime": "2025-06-12",
+    "arrivalDateTime": "2025-06-13",
+    "price": 4000
+  },
+  {
+    "id": 2,
+    "flightNumber": 2,
+    "company": "Airlines",
+    "origin": "São Paulo",
+    "destination": "Minas Gerais",
+    "departureDateTime": "2025-06-12",
+    "arrivalDateTime": "2025-06-13",
+    "price": 4000
+  },
+  {
+    "id": 3,
+    "flightNumber": 3,
+    "company": "Airlines",
+    "origin": "São Paulo",
+    "destination": "Minas Gerais",
+    "departureDateTime": "2025-06-12",
+    "arrivalDateTime": "2025-06-13",
+    "price": 4000
+  },
+  {
+    "id": 4,
+    "flightNumber": 4,
+    "company": "Airlines",
+    "origin": "São Paulo",
+    "destination": "Minas Gerais",
+    "departureDateTime": "2025-06-12",
+    "arrivalDateTime": "2025-06-13",
+    "price": 4000
+  },
+  {
+    "id": 5,
+    "flightNumber": 5,
+    "company": "Airlines",
+    "origin": "São Paulo",
+    "destination": "Minas Gerais",
+    "departureDateTime": "2025-06-12",
+    "arrivalDateTime": "2025-06-13",
+    "price": 4000
+  }
 ]
