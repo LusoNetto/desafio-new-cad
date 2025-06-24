@@ -1,27 +1,28 @@
-import { useState } from 'react';
 import type { tableType } from '../../types/flightsTableType';
 import type { flightType } from '../../types/flightType';
 import Loading from '../Loading/Loading';
+import api from '../../services/api';
+import { useState } from 'react';
 
 const BookmarksTable = ({ isLoading, heads, rows }: tableType) => {
     const [bookmarks, setBookmarks] = useState(
         localStorage.getItem('bookmarks') || '{}'
     );
 
-    const toggleFavoriteFlight = (flightId: number) => {
-        const bookmarksObject = JSON.parse(bookmarks);
+    const toggleFavoriteFlight = async (flightNumber: number) => {
+        const flightId = flightNumber.toString();
+        const bookmarksObject = await api.get("/bookmarks").then((response) => response.data) || JSON.parse(bookmarks);
         if (
             bookmarksObject[flightId] !== 0 &&
             (bookmarksObject[flightId] === null ||
                 bookmarksObject[flightId] === undefined)
-        ) {
-            console.log('Não tinha bookmarksObject[', flightId, ']');
+        ) {            
             bookmarksObject[flightId] = flightId;
-        } else {
-            console.log('Tinha bookmarksObject[', flightId, ']');
+            await api.post(`/bookmarks`, {"flightId": flightId});
+        } else {            
             delete bookmarksObject[flightId];
-        }
-        console.log('bookmarksObject: ', bookmarksObject);
+            await api.delete(`/bookmarks/${flightId}`);
+        }        
         const bookmarksUpdated = JSON.stringify(bookmarksObject);
         localStorage.setItem('bookmarks', bookmarksUpdated);
         setBookmarks(bookmarksUpdated);
@@ -30,7 +31,7 @@ const BookmarksTable = ({ isLoading, heads, rows }: tableType) => {
     const hasBookmark = (id: number) => {
         const bookmarksObject = JSON.parse(bookmarks);
         return (
-            typeof bookmarksObject[id] === 'number' &&
+            typeof bookmarksObject[id] === 'string' &&
             (bookmarksObject[id] !== null || bookmarksObject[id] !== undefined)
         );
     };
@@ -40,7 +41,7 @@ const BookmarksTable = ({ isLoading, heads, rows }: tableType) => {
             {isLoading ? (
                 <Loading />
             ) : !rows.filter((row: flightType) => hasBookmark(row.id))
-                  .length ? (
+                .length ? (
                 <p>nenhum resultado</p>
             ) : (
                 <table>
