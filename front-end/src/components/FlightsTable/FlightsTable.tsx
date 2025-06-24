@@ -38,9 +38,9 @@ const FlightsTable = ({ isLoading, heads, rows }: tableType) => {
 
   useEffect(() => {
     api.get('/bookmarks').then((response) => {
-        setBookmarks(JSON.stringify(response.data))
-    })
-  }, [])
+      setBookmarks(JSON.stringify(response.data));
+    });
+  }, []);
 
   return (
     <>
