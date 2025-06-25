@@ -1,4 +1,4 @@
-export type flightType = {
+export type FlightType = {
   id: number;
   flightNumber: number;
   company: string;
@@ -6,5 +6,5 @@ export type flightType = {
   destination: string;
   departureDateTime: Date;
   arrivalDateTime: Date;
-  price: number;
+  price: string;
 };

@@ -1,4 +1,4 @@
-import type { typeError } from '../../types/typeError';
+import type { typeError } from './types/ErrorType';
 
 const Error = ({ pageOfError }: typeError) => {
   return (
