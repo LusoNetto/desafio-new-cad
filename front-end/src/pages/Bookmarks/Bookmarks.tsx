@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import api from '../../services/api';
 import Error from '../Error/Error';
 import type { FlightType } from '../Flights/types/FlightType';
-import Table from '../../components/Table/Table';
+import FlightsTable from '../../components/FlightsTable/FlightsTable';
 import useFlight from '../Flights/hooks/useFlight';
 import Filter from '../../components/Filter/Filter';
-import { Title } from '../../components/Title/title';
+import { Title } from '../../components/Title/Title';
 
 const Bookmarks = () => {
   const [flights, setFlights] = useState([] as FlightType[]);
@@ -48,7 +48,7 @@ const Bookmarks = () => {
           <Title>Bookmarks</Title>
           <Filter setFlights={setFlights} setIsLoading={setIsLoading} setHasErrorApi={setHasErrorApi} inBookmarksPage />
           <br />
-          <Table
+          <FlightsTable
             heads={heads}
             isLoading={isLoading}
             rows={flights}

@@ -1,10 +1,18 @@
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import type { FilterDataType } from "../../pages/Flights/types/FilterDataType";
 import { convertDataBaseDateToFormDate } from "../../utils/dateConverter";
 import type { FlightType } from "../../pages/Flights/types/FlightType";
 import api from "../../services/api";
 import type { FilterType } from "./types/FilterType";
 import useFlight from "../../pages/Flights/hooks/useFlight";
+import { Button } from "../Button/Button";
+import { InputContainer } from "../InputContainer/InputContainer";
+import { Label } from "../Label/Label";
+import { SubmitConteiner } from "../SubmitConteiner/SubmitConteiner";
+import { Select } from "../Select/Select";
+import { Form } from "../Form/Form";
+import { Container } from "../Container/Container";
+import { Input } from "../Input/Input";
 
 const Filter = ({ setIsLoading, setFlights, setHasErrorApi, inBookmarksPage }: FilterType) => {
   const { register, handleSubmit } = useForm();
@@ -62,80 +70,80 @@ const Filter = ({ setIsLoading, setFlights, setHasErrorApi, inBookmarksPage }: F
 
   return (
     <>
-      <form>
-        <div>
-          <label>Search</label>
-          <input {...register("search")} type="search" id="default-search" placeholder="Digite aqui..." required />
-          <button
-            type="submit"
-            onClick={handleSubmit((data) => onFilter(data as FilterDataType))}
-          >
-            Pesquisar
-          </button>
-        </div>
-        <br />
-        <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Origem:
-            <select
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              {...register("origin")}
+      <Form>
+        <InputContainer>
+          <Label>Search:
+            <Input {...register("search")} type="search" id="default-search" placeholder="Digite aqui..." required />
+            <Button
+              color="blue"
+              type="submit"
+              onClick={handleSubmit((data) => onFilter(data as FilterDataType))}
             >
-              <option value="Selecione">Selecione</option>
-              <option value="São Paulo">São Paulo</option>
-              <option value="Minas Gerais">Minas Gerais</option>
-              <option value="Espirito Santo">Espirito Santo</option>
-              <option value="Bahia">Bahia</option>
-            </select>
-          </label>
-        </div>
-        <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Destino:
-            <select
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              {...register("destination")}
-            >
-              <option value="Selecione">Selecione</option>
-              <option value="São Paulo">São Paulo</option>
-              <option value="Minas Gerais">Minas Gerais</option>
-              <option value="Espirito Santo">Espirito Santo</option>
-              <option value="Bahia">Bahia</option>
-            </select>
-          </label>
-        </div>
-        <div className="mb-5">
-          <label className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              Pesquisar
+            </Button>
+          </Label>
+        </InputContainer>
+        <Container>
+          <InputContainer>
+            <Label>Origem:
+              <Select
+                {...register("origin")}
+              >
+                <option value="Selecione">Selecione</option>
+                <option value="São Paulo">São Paulo</option>
+                <option value="Minas Gerais">Minas Gerais</option>
+                <option value="Espirito Santo">Espirito Santo</option>
+                <option value="Bahia">Bahia</option>
+              </Select>
+            </Label>
+          </InputContainer>
+          <InputContainer>
+            <Label>
+              Destino:
+              <Select
+                {...register("destination")}
+              >
+                <option value="Selecione">Selecione</option>
+                <option value="São Paulo">São Paulo</option>
+                <option value="Minas Gerais">Minas Gerais</option>
+                <option value="Espirito Santo">Espirito Santo</option>
+                <option value="Bahia">Bahia</option>
+              </Select>
+            </Label>
+          </InputContainer>
+        </Container>
+        <InputContainer>
+          <Label>
             Partida:
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            <Input
               type="date"
               {...register("departure")}
             />
-          </label>
-        </div>
-        <div className="mb-5">
-          <label className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          </Label>
+        </InputContainer>
+        <InputContainer>
+          <Label>
             Chegada:
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            <Input
               type="date"
               {...register("arrival")}
             />
-          </label>
-        </div>
-        <br />
-        <button
-          className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-          onClick={handleSubmit(onResetTable)}
-        >
-          Limpar pesquisa
-        </button>
-        <button
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          type="submit"
-          onClick={handleSubmit((data) => onFilter(data as FilterDataType))}
-        >Filtrar</button>
-      </form>
+          </Label>
+        </InputContainer>
+        <SubmitConteiner>
+          <Button
+            color="grey"
+            onClick={handleSubmit(onResetTable)}
+          >
+            Limpar pesquisa
+          </Button>
+          <Button
+            color="green"
+            type="submit"
+            onClick={handleSubmit((data) => onFilter(data as FilterDataType))}
+          >Filtrar</Button>
+        </SubmitConteiner>
+      </Form>
     </>
   )
 }

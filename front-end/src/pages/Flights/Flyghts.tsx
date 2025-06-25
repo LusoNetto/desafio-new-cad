@@ -2,12 +2,9 @@ import { useEffect, useState } from 'react';
 import api from '../../services/api';
 import Error from '../Error/Error';
 import type { FlightType } from './types/FlightType';
-import { convertDataBaseDateToFormDate } from '../../utils/dateConverter';
-import Table from '../../components/Table/Table';
-import { useForm } from 'react-hook-form';
-import type { FilterDataType } from './types/FilterDataType';
+import FlightsTable from '../../components/FlightsTable/FlightsTable';
 import Filter from '../../components/Filter/Filter';
-import { Title } from '../../components/Title/title';
+import { Title } from '../../components/Title/Title';
 
 const Flights = () => {
   const [flights, setFlights] = useState([] as FlightType[]);
@@ -27,7 +24,6 @@ const Flights = () => {
     'Chegada',
     'Preco',
     'Favorito',
-    '',
   ];
 
   useEffect(() => {
@@ -50,7 +46,7 @@ const Flights = () => {
           <Title>Flights</Title>
           <Filter setFlights={setFlights} setHasErrorApi={setHasErrorApi} setIsLoading={setIsLoading} />
           <br />
-          <Table heads={heads} isLoading={isLoading} rows={flights} bookmarks={bookmarks} setBookmarks={setBookmarks} />
+          <FlightsTable heads={heads} isLoading={isLoading} rows={flights} bookmarks={bookmarks} setBookmarks={setBookmarks} />
         </>
       ) : (
         <Error pageOfError="Flights" />
