@@ -5,6 +5,7 @@ import type { FlightType } from '../Flights/types/FlightType';
 import Table from '../../components/Table/Table';
 import useFlight from '../Flights/hooks/useFlight';
 import Filter from '../../components/Filter/Filter';
+import { Title } from '../../components/Title/title';
 
 const Bookmarks = () => {
   const [flights, setFlights] = useState([] as FlightType[]);
@@ -44,7 +45,7 @@ const Bookmarks = () => {
     <>
       {!hasErrorApi ? (
         <>
-          <h1>Bookmarks</h1>
+          <Title>Bookmarks</Title>
           <Filter setFlights={setFlights} setIsLoading={setIsLoading} setHasErrorApi={setHasErrorApi} inBookmarksPage />
           <br />
           <Table

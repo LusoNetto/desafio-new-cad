@@ -7,6 +7,7 @@ import Table from '../../components/Table/Table';
 import { useForm } from 'react-hook-form';
 import type { FilterDataType } from './types/FilterDataType';
 import Filter from '../../components/Filter/Filter';
+import { Title } from '../../components/Title/title';
 
 const Flights = () => {
   const [flights, setFlights] = useState([] as FlightType[]);
@@ -46,7 +47,7 @@ const Flights = () => {
     <>
       {!hasErrorApi ? (
         <>
-          <h1>Flights</h1>
+          <Title>Flights</Title>
           <Filter setFlights={setFlights} setHasErrorApi={setHasErrorApi} setIsLoading={setIsLoading} />
           <br />
           <Table heads={heads} isLoading={isLoading} rows={flights} bookmarks={bookmarks} setBookmarks={setBookmarks} />
