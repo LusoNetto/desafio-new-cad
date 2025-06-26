@@ -57,6 +57,7 @@ export const FlightCard = (props: FlightCardProps) => {
 
       <S.BookmarkButton>
         <Star
+          onClick={() => console.log(flight.flightNumber)}
           size={24}
           weight={isBookmarked ? 'fill' : 'regular'}
           color={isBookmarked ? COLORS.WARNING_MAIN : COLORS.NEUTRAL_500}
