@@ -9,6 +9,8 @@ import { useFlight } from '@/pages/Flights/useFlight'
 
 export const FlightsList = (props: FlightsListProps) => {
 
+  const {isBookmarked} = useFlight();
+
   const { flights } = props
 
   const hasFlights = flights.length > 0
