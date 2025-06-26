@@ -1,20 +1,32 @@
-import { BrowserRouter, Route, Routes } from 'react-router';
-import Flights from './pages/Flights/Flyghts.tsx';
-import Bookmarks from './pages/Bookmarks/Bookmarks.tsx';
-import { SideBar } from './components/SideBar/SideBar.tsx';
+import { ThemeProvider } from 'styled-components'
+import { BrowserRouter, Route, Routes } from 'react-router'
+
+// PAGES
+import { Flights } from '@/pages'
+
+import Bookmarks from '@/pages/Bookmarks/Bookmarks.tsx'
+
+// COMPONENTS
+import { Navbar } from '@/components/Navbar'
+
+// STYLES
+import { GlobalStyle, theme } from './styles'
 
 const App = () => {
   return (
-    <>
-      <SideBar />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/flights" element={<Flights />} />
-            <Route path="/bookmarks" element={<Bookmarks />} />
-          </Routes>
-        </BrowserRouter>
-    </>
-  );
-};
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
 
-export default App;
+      <BrowserRouter>
+        <Navbar />
+
+        <Routes>
+          <Route path="/flights" element={<Flights />} />
+          <Route path="/bookmarks" element={<Bookmarks />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
+  )
+}
+
+export default App
