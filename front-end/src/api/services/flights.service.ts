@@ -1,10 +1,10 @@
 import { api } from '../core'
 
-import type { RequestFlightsDto } from '../dtos'
+import type { RequestFlightDto } from '../dtos'
 
 export class FlightsService {
   static async getFlights() {
-    const { data } = await api.get<RequestFlightsDto[]>('/flights')
+    const { data } = await api.get<RequestFlightDto[]>('/flights')
     return data
   }
 }
