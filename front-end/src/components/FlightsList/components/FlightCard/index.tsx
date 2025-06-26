@@ -6,9 +6,12 @@ import { formatters } from '@/utils'
 import * as S from './styles'
 
 import type { FlightCardProps } from './types'
+import { useFlight } from '@/pages/Flights/useFlight'
 
 export const FlightCard = (props: FlightCardProps) => {
   const { flight, isBookmarked } = props
+
+  const { toogleBookmarkFlight } = useFlight();
 
   const { COLORS } = useTheme()
 
@@ -57,7 +60,7 @@ export const FlightCard = (props: FlightCardProps) => {
 
       <S.BookmarkButton>
         <Star
-          onClick={() => console.log(flight.flightNumber)}
+          onClick={() => toogleBookmarkFlight({flightId: flight.flightNumber})}
           size={24}
           weight={isBookmarked ? 'fill' : 'regular'}
           color={isBookmarked ? COLORS.WARNING_MAIN : COLORS.NEUTRAL_500}

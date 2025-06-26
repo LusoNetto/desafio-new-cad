@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 // SERVICES
-import { FlightsService, BookmarksService } from '@/api'
+import { FlightsService, BookmarksService, api } from '@/api'
 
 // TYPES
 import type { GetBookmarkDto, PostBookmarkDto, RequestFlightDto } from '@/api'
@@ -47,31 +47,23 @@ export const useFlight = () => {
   }, [])
 
   const getLocalStorageBookmarks = () => {
-    try {
-      const bookmarksLocalStorage = localStorage.getItem('bookmarks')
-      return bookmarksLocalStorage || "{}"
-    } catch (error) {
-      console.error('error:' + error)
-      setHasApiError(true)
-    } finally {
-      setIsLoading(false)
-    }
+    const bookmarksLocalStorage = localStorage.getItem('bookmarks')
+    return bookmarksLocalStorage || "{}"
   }
 
   const isBookmarked = (props: GetBookmarkDto) => {
     const { flightId } = props;
-    const bookmarksObject = JSON.parse(JSON.stringify(getLocalStorageBookmarks() || {}));
-    console.log(bookmarksObject)
-    return !!(bookmarksObject[flightId] !== 0 &&
+    const bookmarksObject = JSON.parse(getLocalStorageBookmarks() || "{}");
+    return !(bookmarksObject[flightId] !== 0 &&
       (bookmarksObject[flightId] === null ||
         bookmarksObject[flightId] === undefined));
   }
 
   const getBookmarks = async () => {
     try {
-      setIsLoading(true)
-      const bookmarks = await BookmarksService.getBookmarks()
-      setBookmarks(JSON.stringify(bookmarks))
+      const bookmarksReturned = await BookmarksService.getBookmarks()
+      setBookmarks(JSON.stringify(bookmarksReturned))
+      localStorage.setItem('bookmarks', JSON.stringify(bookmarksReturned))
     } catch (error) {
       console.error('error:' + error)
       setHasApiError(true)
@@ -97,8 +89,8 @@ export const useFlight = () => {
 
   const deleteBookmark = async (props: PostBookmarkDto) => {
     try {
-      const { flightId } = props;
       setIsLoading(true)
+      const { flightId } = props;
       await BookmarksService.deleteBookmarks({ flightId: flightId })
       const bookmarks = await BookmarksService.getBookmarks()
       setBookmarks(JSON.stringify(bookmarks))
@@ -107,6 +99,21 @@ export const useFlight = () => {
       setHasApiError(true)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const toogleBookmarkFlight = (props: GetBookmarkDto) => {
+    try {
+      const {flightId} = props;
+      if(isBookmarked({flightId: flightId})) {
+        deleteBookmark({flightId: flightId})
+      } else {
+        postBookmark({flightId:flightId})
+      }
+    } catch (error) {
+      
+    } finally {
+
     }
   }
 
@@ -158,6 +165,10 @@ export const useFlight = () => {
   useEffect(() => {
     getFlights()
   }, [getFlights])
+  
+  useEffect(() => {
+    getBookmarks()
+  }, [getBookmarks])
 
   useEffect(() => {
     filterFlights()
@@ -171,6 +182,7 @@ export const useFlight = () => {
     bookmarks,
     onFilter,
     onFilterReset,
-    isBookmarked
+    isBookmarked,
+    toogleBookmarkFlight
   }
 }
