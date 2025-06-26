@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 // SERVICES
-import { FlightsService, BookmarksService, api } from '@/api'
+import { FlightsService, BookmarksService } from '@/api'
 
 // TYPES
 import type { GetBookmarkDto, PostBookmarkDto, RequestFlightDto } from '@/api'
