@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 // PAGES
 import { Flights } from '@/pages'
 
-import Bookmarks from '@/pages/Bookmarks'
+import { Bookmarks } from '@/pages'
 
 // COMPONENTS
 import { Navbar } from '@/components/Navbar'
