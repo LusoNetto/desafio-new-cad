@@ -1,55 +1,54 @@
-import { useEffect, useState } from 'react';
-import api from '../../services/api';
-import Error from '../Error/Error';
-import type { FlightType } from '../Flights/types/FlightType';
-import FlightsTable from '../../components/FlightsTable/FlightsTable';
-import useFlight from '../Flights/hooks/useFlight';
-import Filter from '../../components/Filter/Filter';
-import { Title } from '../../components/Title/Title';
+import { useEffect, useState } from 'react'
+import { api } from '../../api/core/axios-api'
+import Error from '../Error/Error'
+import type { FlightType } from '../Flights/types'
+import { useFlight } from '../Flights/useFlight'
+
+// COMPONENTS
+import { FlightsTable, Filter, Title } from '@/components'
+
+// CONSTANTS
+import { FLIGHTS_TABLE_HEADS } from '@/constants'
 
 const Bookmarks = () => {
-  const [flights, setFlights] = useState([] as FlightType[]);
+  const [flights, setFlights] = useState([] as FlightType[])
   const [bookmarks, setBookmarks] = useState(
-    localStorage.getItem('bookmarks') || '{}'
-  );
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasErrorApi, setHasErrorApi] = useState(false);
-  
-  const {hasBookmark} = useFlight();
+    localStorage.getItem('bookmarks') || '{}',
+  )
+  const [isLoading, setIsLoading] = useState(true)
+  const [hasErrorApi, setHasErrorApi] = useState(false)
 
-  const heads = [
-    'Número do voo',
-    'Companhia',
-    'Origem',
-    'Destino',
-    'Partida',
-    'Chegada',
-    'Preco',
-    '',
-  ];
+  const { hasBookmark } = useFlight()
 
   useEffect(() => {
     api
       .get('/flights')
       .then((response) => {
-        setIsLoading(false);
-        setFlights(response.data.filter((row: FlightType) => hasBookmark(row.id)));
+        setIsLoading(false)
+        setFlights(
+          response.data.filter((row: FlightType) => hasBookmark(row.id)),
+        )
       })
       .catch((err) => {
-        setHasErrorApi(true);
-        console.error('error:' + err);
-      });
-  }, [bookmarks]);
+        setHasErrorApi(true)
+        console.error('error:' + err)
+      })
+  }, [bookmarks])
 
   return (
     <>
       {!hasErrorApi ? (
         <>
           <Title>Bookmarks</Title>
-          <Filter setFlights={setFlights} setIsLoading={setIsLoading} setHasErrorApi={setHasErrorApi} inBookmarksPage />
+          <Filter
+            setFlights={setFlights}
+            setIsLoading={setIsLoading}
+            setHasErrorApi={setHasErrorApi}
+            inBookmarksPage
+          />
           <br />
           <FlightsTable
-            heads={heads}
+            heads={FLIGHTS_TABLE_HEADS}
             isLoading={isLoading}
             rows={flights}
             bookmarks={bookmarks}
@@ -60,7 +59,7 @@ const Bookmarks = () => {
         <Error pageOfError="Bookmarks" />
       )}
     </>
-  );
-};
+  )
+}
 
-export default Bookmarks;
+export default Bookmarks
