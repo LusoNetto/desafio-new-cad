@@ -25,7 +25,7 @@ route.post('/', async (req: Request, res: Response) => {
         message: `Send all requestuire fields: flightId`,
       });
     }
-    if (typeof flightId !== 'string') {
+    if (typeof flightId === 'string') {
       res.status(400).send({
         message: `FlightId must be a number but is ${typeof flightId}`,
       });
