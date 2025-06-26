@@ -1,8 +1,8 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const SubmitConteiner = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap:10px
-`;
+  gap: 10px;
+`

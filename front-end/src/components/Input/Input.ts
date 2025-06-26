@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Input = styled.input`
   width: 100%;
@@ -6,4 +6,4 @@ export const Input = styled.input`
   display: inline-block;
   border: 1px solid #ccc;
   border-radius: 4px;
-`;
+`

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Form = styled.form`
   width: fit-content;
@@ -12,4 +12,4 @@ export const Form = styled.form`
   background-color: #f2f2f2;
   padding: 20px;
   gap: 20px;
-`;
+`

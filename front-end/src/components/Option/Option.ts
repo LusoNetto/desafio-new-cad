@@ -1,5 +1,3 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
-export const Option = styled.option`
-  
-`;
+export const Option = styled.option``
