@@ -5,7 +5,6 @@ import { FlightsService, BookmarksService } from '@/api'
 
 // TYPES
 import type { GetBookmarkDto, PostBookmarkDto, RequestFlightDto } from '@/api'
-import { useFlight } from '@/pages/Flights'
 
 type FilterFormData = {
   origin: string
