@@ -1,4 +1,4 @@
-import loadingGif from '../../assets/loading.gif';
+import loadingGif from '../../assets/loading.gif'
 
 const Loading = () => {
   return (
@@ -11,7 +11,7 @@ const Loading = () => {
         alt="loading icon"
       />
     </>
-  );
-};
+  )
+}
 
-export default Loading;
+export default Loading
