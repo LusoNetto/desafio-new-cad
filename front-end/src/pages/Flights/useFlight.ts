@@ -50,12 +50,31 @@ export const useFlight = () => {
     }
   }, [])
 
+  const BOOKMARKS_KEY = 'bookmarkedFlightsIds';
+
+  function saveBookmarksToStorage(ids: number[]) {
+    localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(ids));
+  }
+
+  function getBookmarksFromStorage(): number[] {
+    const raw = localStorage.getItem(BOOKMARKS_KEY);
+    if (!raw) return [];
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+
   const getBookmarks = useCallback(async () => {
     try {
-      const { flightIds = [] } = await BookmarksService.getBookmarks()
+      const { flightIds = [] } = await BookmarksService.getBookmarks();
+
+      saveBookmarksToStorage(flightIds);
       const bookmarkedFlights = flights.filter((flight) =>
         flightIds.includes(flight.id),
       )
+
       setBookmarkedFlights(bookmarkedFlights)
     } catch (error) {
       handleError(error)
@@ -64,11 +83,15 @@ export const useFlight = () => {
 
   const updateBookmarks = useCallback(
     (flight: RequestFlightDto, isAdding: boolean) => {
-      setBookmarkedFlights((prev) =>
-        isAdding
+      setBookmarkedFlights((prev) => {
+        const updated = isAdding
           ? [...prev, flight]
-          : prev.filter((bookmarked) => bookmarked.id !== flight.id),
-      )
+          : prev.filter((bookmarked) => bookmarked.id !== flight.id);
+
+        saveBookmarksToStorage(updated.map(f => f.id));
+
+        return updated;
+      })
     },
     [],
   )
@@ -142,7 +165,7 @@ export const useFlight = () => {
           flight.destination.toLowerCase().includes(filterData.search.toLowerCase()) ||
           flight.company.toLowerCase().includes(filterData.search.toLowerCase()))
     )
-    console.log('Filtered Bookmarked Flights:', filtered)
+    
     setFilteredBookmarkedFlights(filtered)
   }, [bookmarkedFlights])
 
@@ -165,6 +188,14 @@ export const useFlight = () => {
   useEffect(() => {
     filterFlights()
   }, [filterFlights])
+
+  useEffect(() => {
+    const ids = getBookmarksFromStorage();
+    if (ids.length > 0 && flights.length > 0) {
+      const bookmarkedFlights = flights.filter(f => ids.includes(f.id));
+      setBookmarkedFlights(bookmarkedFlights);
+    }
+  }, [flights]);
 
   return {
     flights,
