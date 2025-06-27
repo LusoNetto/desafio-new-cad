@@ -7,7 +7,8 @@ import { errorHandler } from './middlewares/error.middleware';
 import { logger } from './utils/looger';
 import compression from 'compression';
 import helmet from 'helmet';
-
+import swaggerUi from 'swagger-ui-express';
+import { swaggerDocument } from './docs/swagger';
 
 const CORS_OPTIONS = {
   origin: process.env.CORS_ORIGIN || '*',
@@ -39,6 +40,8 @@ app.get('/health', (_req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(errorHandler);
 
