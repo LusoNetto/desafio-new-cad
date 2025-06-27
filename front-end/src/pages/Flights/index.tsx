@@ -8,8 +8,15 @@ import { useFlight } from './useFlight'
 import * as S from './styles'
 
 export const Flights = () => {
-  const { filteredFlights, hasApiError, isLoading, onFilter, onFilterReset } =
-    useFlight()
+  const {
+    filteredFlights,
+    bookmarkedFlights,
+    hasApiError,
+    isLoading,
+    onFilter,
+    onFilterReset,
+    onToogleBookmarkFlight,
+  } = useFlight()
 
   return (
     <S.FlightsContainer>
@@ -19,11 +26,13 @@ export const Flights = () => {
 
       <Filter onFilter={onFilter} onFilterReset={onFilterReset} />
 
-      <FlightsList flights={filteredFlights} />
+      <FlightsList
+        flights={filteredFlights}
+        bookmarkedFlights={bookmarkedFlights}
+        onToogleBookmarkFlight={onToogleBookmarkFlight}
+      />
 
       {isLoading && <ScreenLoader />}
     </S.FlightsContainer>
   )
 }
-
-export { useFlight }
