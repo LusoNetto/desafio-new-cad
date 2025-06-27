@@ -1,5 +1,5 @@
 import express from 'express';
-import app from './src/app';
+import { app } from './app';
 import connectRedis from './redisServer';
 import bodyParser from 'body-parser';
 
