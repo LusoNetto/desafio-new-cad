@@ -1,22 +1,112 @@
 [
   {
     "id": 0,
-    "flightNumber": 0,
-    "company": "Airlines",
+    "flightNumber": 1001,
+    "company": "LATAM",
     "origin": "São Paulo",
-    "destination": "Rio Grande do Sul",
-    "departureTime": "2025-06-01T00:00:00.000Z",
-    "arrival": "2025-06-02T00:00:00.000Z",
-    "price": 3000
+    "destination": "Bahia",
+    "departureDateTime": "2025-01-15",
+    "arrivalDateTime": "2025-01-15",
+    "price": 850
   },
   {
-    "id": 0,
-    "flightNumber": 0,
-    "company": "Airlines",
-    "origin": "Sergipe",
-    "destination": "Rio de Janeiro",
-    "departureTime": "2025-06-01T00:00:00.000Z",
-    "arrival": "2025-06-02T00:00:00.000Z",
-    "price": 4000
+    "id": 1,
+    "flightNumber": 1002,
+    "company": "GOL",
+    "origin": "São Paulo",
+    "destination": "Minas Gerais",
+    "departureDateTime": "2025-01-20",
+    "arrivalDateTime": "2025-01-20",
+    "price": 650
+  },
+  {
+    "id": 2,
+    "flightNumber": 1003,
+    "company": "Azul",
+    "origin": "São Paulo",
+    "destination": "Espírito Santo",
+    "departureDateTime": "2025-01-25",
+    "arrivalDateTime": "2025-01-25",
+    "price": 720
+  },
+  {
+    "id": 3,
+    "flightNumber": 1004,
+    "company": "LATAM",
+    "origin": "Minas Gerais",
+    "destination": "São Paulo",
+    "departureDateTime": "2025-02-01",
+    "arrivalDateTime": "2025-02-01",
+    "price": 680
+  },
+  {
+    "id": 4,
+    "flightNumber": 1005,
+    "company": "GOL",
+    "origin": "Minas Gerais",
+    "destination": "Bahia",
+    "departureDateTime": "2025-02-05",
+    "arrivalDateTime": "2025-02-06",
+    "price": 920
+  },
+  {
+    "id": 5,
+    "flightNumber": 1006,
+    "company": "Azul",
+    "origin": "Minas Gerais",
+    "destination": "Espírito Santo",
+    "departureDateTime": "2025-02-10",
+    "arrivalDateTime": "2025-02-10",
+    "price": 450
+  },
+  {
+    "id": 6,
+    "flightNumber": 1007,
+    "company": "LATAM",
+    "origin": "Espírito Santo",
+    "destination": "São Paulo",
+    "departureDateTime": "2025-02-15",
+    "arrivalDateTime": "2025-02-15",
+    "price": 750
+  },
+  {
+    "id": 7,
+    "flightNumber": 1008,
+    "company": "GOL",
+    "origin": "Espírito Santo",
+    "destination": "Minas Gerais",
+    "departureDateTime": "2025-02-20",
+    "arrivalDateTime": "2025-02-20",
+    "price": 480
+  },
+  {
+    "id": 8,
+    "flightNumber": 1009,
+    "company": "Azul",
+    "origin": "Espírito Santo",
+    "destination": "Bahia",
+    "departureDateTime": "2025-02-25",
+    "arrivalDateTime": "2025-02-26",
+    "price": 1100
+  },
+  {
+    "id": 9,
+    "flightNumber": 1010,
+    "company": "LATAM",
+    "origin": "Bahia",
+    "destination": "São Paulo",
+    "departureDateTime": "2025-03-01",
+    "arrivalDateTime": "2025-03-01",
+    "price": 890
+  },
+  {
+    "id": 10,
+    "flightNumber": 1011,
+    "company": "GOL",
+    "origin": "Bahia",
+    "destination": "Minas Gerais",
+    "departureDateTime": "2025-03-05",
+    "arrivalDateTime": "2025-03-06",
+    "price": 950
   }
 ]
