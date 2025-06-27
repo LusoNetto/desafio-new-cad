@@ -27,14 +27,17 @@ export const FormContainer = styled.form`
 
 export const InputsContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 0.75fr 0.75fr 0.75fr 0.25fr;
+  grid-template-columns: 1fr 1fr 0.75fr 0.75fr 0.75fr 0.25fr 0.25fr;
   gap: 1rem;
 `
 
-export const InputContainer = styled.div`
+export const InputFilterContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+`
+export const InputSearchContainer = styled(InputFilterContainer)`
+  grid-column: span 2;
 `
 
 export const Label = styled.label`

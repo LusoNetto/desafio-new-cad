@@ -1,3 +1,4 @@
+// HOOKS
 import { useCallback, useEffect, useState } from 'react'
 
 // SERVICES
@@ -11,6 +12,7 @@ type FilterFormData = {
   destination: string
   departure: string
   arrival: string
+  search?: string
 }
 
 export const useFlight = () => {
@@ -24,9 +26,12 @@ export const useFlight = () => {
     destination: '',
     departure: '',
     arrival: '',
+    search: '',
   })
   const [hasApiError, setHasApiError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  const [filteredBookmarkedFlights, setFilteredBookmarkedFlights] = useState<RequestFlightDto[]>([])
 
   const handleError = (error: unknown) => {
     console.error('Error:', error)
@@ -95,7 +100,7 @@ export const useFlight = () => {
   const onFilter = (data: FilterFormData) => setFilter(data)
 
   const onFilterReset = () =>
-    setFilter({ origin: '', destination: '', departure: '', arrival: '' })
+    setFilter({ origin: '', destination: '', departure: '', arrival: '', search: '' })
 
   const filterFlights = useCallback(() => {
     const hasActiveFilters = Object.values(filter).some(Boolean)
@@ -110,11 +115,44 @@ export const useFlight = () => {
         (!filter.origin || flight.origin === filter.origin) &&
         (!filter.destination || flight.destination === filter.destination) &&
         (!filter.departure || flight.departureDateTime === filter.departure) &&
-        (!filter.arrival || flight.arrivalDateTime === filter.arrival),
+        (!filter.arrival || flight.arrivalDateTime === filter.arrival) &&
+        (!filter.search ||
+          flight.origin.toLowerCase().includes(filter.search.toLowerCase()) ||
+          flight.destination.toLowerCase().includes(filter.search.toLowerCase()) ||
+          flight.company.toLowerCase().includes(filter.search.toLowerCase()))
     )
 
     setFilteredFlights(filtered)
   }, [flights, filter])
+
+  const filterBookmarkedFlights = useCallback((filterData: FilterFormData) => {
+    const hasActiveFilters = Object.values(filterData).some(Boolean)
+    if (!hasActiveFilters) {
+      setFilteredBookmarkedFlights(bookmarkedFlights)
+      return
+    }
+    const filtered = bookmarkedFlights.filter(
+      (flight) =>
+        (!filterData.origin || flight.origin === filterData.origin) &&
+        (!filterData.destination || flight.destination === filterData.destination) &&
+        (!filterData.departure || flight.departureDateTime === filterData.departure) &&
+        (!filterData.arrival || flight.arrivalDateTime === filterData.arrival) &&
+        (!filterData.search ||
+          flight.origin.toLowerCase().includes(filterData.search.toLowerCase()) ||
+          flight.destination.toLowerCase().includes(filterData.search.toLowerCase()) ||
+          flight.company.toLowerCase().includes(filterData.search.toLowerCase()))
+    )
+    console.log('Filtered Bookmarked Flights:', filtered)
+    setFilteredBookmarkedFlights(filtered)
+  }, [bookmarkedFlights])
+
+  const onBookmarksFilterReset = () => {
+    setFilteredBookmarkedFlights(bookmarkedFlights)
+  }
+
+  useEffect(() => {
+    setFilteredBookmarkedFlights(bookmarkedFlights)
+  }, [bookmarkedFlights])
 
   useEffect(() => {
     getFlights()
@@ -132,10 +170,13 @@ export const useFlight = () => {
     flights,
     filteredFlights,
     bookmarkedFlights,
+    filteredBookmarkedFlights,
     isLoading,
     hasApiError,
     onFilter,
     onFilterReset,
     onToogleBookmarkFlight: toggleBookmark,
+    filterBookmarkedFlights,
+    onBookmarksFilterReset, // exporta novo handler
   }
 }
