@@ -48,9 +48,11 @@ export const useFlight = () => {
   const getBookmarks = useCallback(async () => {
     try {
       const { flightIds = [] } = await BookmarksService.getBookmarks()
+      console.log('flightIds', flightIds)
       const bookmarkedFlights = flights.filter((flight) =>
         flightIds.includes(flight.id),
       )
+      console.log('bookmarkedFlights', bookmarkedFlights)
       setBookmarkedFlights(bookmarkedFlights)
     } catch (error) {
       handleError(error)

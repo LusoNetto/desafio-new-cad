@@ -8,7 +8,8 @@ import { getAllBookmarks, addBookmark, removeBookmark } from '../services/bookma
 export const getBookmarks = async (_req: Request, res: Response) => {
   try {
     const bookmarks = await getAllBookmarks();
-    res.status(StatusCodes.OK).json(bookmarks);
+    const flightIds = Object.values(bookmarks).map(Number);
+    res.status(StatusCodes.OK).json({ flightIds });
     return;
   } catch (error) {
     handleServerError(res, error, 'fetch bookmarks');
