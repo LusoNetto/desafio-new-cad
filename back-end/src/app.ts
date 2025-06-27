@@ -32,7 +32,7 @@ app.use((req, _res, next) => {
   next();
 });
 
-app.use('/v1', routes);
+app.use('/api/v1', routes);
 
 app.get('/health', (_req, res) => {
   res.status(StatusCodes.OK).json({ 
