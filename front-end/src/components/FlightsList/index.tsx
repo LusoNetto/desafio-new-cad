@@ -1,24 +1,35 @@
 import { PaperPlaneTilt } from 'phosphor-react'
 
+import type { RequestFlightDto } from '@/api'
+
 import { FlightCard } from './components'
 
 import * as S from './styles'
 
 import type { FlightsListProps } from './types'
-import { useFlight } from '@/pages/Flights/useFlight'
 
 export const FlightsList = (props: FlightsListProps) => {
-
-  const {isBookmarked} = useFlight();
-
-  const { flights } = props
+  const { flights, bookmarkedFlights, onToogleBookmarkFlight } = props
 
   const hasFlights = flights.length > 0
+
+  const isFlightBookmarked = (flight: RequestFlightDto) => {
+    return bookmarkedFlights.some(
+      (bookmarkedFlight) => bookmarkedFlight.id === flight.id,
+    )
+  }
 
   return (
     <S.FlightsListContainer>
       {hasFlights ? (
-        flights.map((flight) => <FlightCard key={flight.flightNumber} flight={flight} isBookmarked={isBookmarked({flightId:flight.flightNumber})} />)
+        flights.map((flight) => (
+          <FlightCard
+            key={flight.flightNumber}
+            flight={flight}
+            isBookmarked={isFlightBookmarked(flight)}
+            onToogleBookmarkFlight={onToogleBookmarkFlight}
+          />
+        ))
       ) : (
         <S.FlightsListEmpty>
           <PaperPlaneTilt size={48} />

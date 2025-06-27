@@ -2,14 +2,20 @@
 import { Filter, FlightsList, GenericError, ScreenLoader } from '@/components'
 
 // HOOKS
-import {useBookmark} from "./useBookmark"
+import { useFlight } from '../Flights/useFlight'
 
 // STYLES
 import * as S from './styles'
 
 export const Bookmarks = () => {
-  const { filteredFlights, hasApiError, isLoading, onFilter, onFilterReset } =
-    useBookmark();
+  const {
+    hasApiError,
+    isLoading,
+    bookmarkedFlights,
+    onFilter,
+    onFilterReset,
+    onToogleBookmarkFlight,
+  } = useFlight()
 
   return (
     <S.FlightsContainer>
@@ -19,7 +25,11 @@ export const Bookmarks = () => {
 
       <Filter onFilter={onFilter} onFilterReset={onFilterReset} />
 
-      <FlightsList flights={filteredFlights} />
+      <FlightsList
+        flights={bookmarkedFlights}
+        bookmarkedFlights={bookmarkedFlights}
+        onToogleBookmarkFlight={onToogleBookmarkFlight}
+      />
 
       {isLoading && <ScreenLoader />}
     </S.FlightsContainer>

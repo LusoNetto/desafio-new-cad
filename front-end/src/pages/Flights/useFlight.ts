@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { FlightsService, BookmarksService } from '@/api'
 
 // TYPES
-import type { GetBookmarkDto, PostBookmarkDto, RequestFlightDto } from '@/api'
+import type { RequestFlightDto } from '@/api'
 
 type FilterFormData = {
   origin: string
@@ -14,161 +14,115 @@ type FilterFormData = {
 }
 
 export const useFlight = () => {
-  const [filteredFlights, setFilteredFlights] = useState(
-    [] as RequestFlightDto[],
-  )
-
-  const [filter, setFilter] = useState({
+  const [filteredFlights, setFilteredFlights] = useState<RequestFlightDto[]>([])
+  const [flights, setFlights] = useState<RequestFlightDto[]>([])
+  const [bookmarkedFlights, setBookmarkedFlights] = useState<
+    RequestFlightDto[]
+  >([])
+  const [filter, setFilter] = useState<FilterFormData>({
     origin: '',
     destination: '',
     departure: '',
     arrival: '',
   })
-
-  const [flights, setFlights] = useState([] as RequestFlightDto[])
-  const [bookmarks, setBookmarks] = useState('{}')
-
   const [hasApiError, setHasApiError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  const handleError = (error: unknown) => {
+    console.error('Error:', error)
+    setHasApiError(true)
+  }
 
   const getFlights = useCallback(async () => {
     try {
       setIsLoading(true)
-
       const flights = await FlightsService.getFlights()
-
       setFlights(flights)
     } catch (error) {
-      console.error('error:' + error)
-      setHasApiError(true)
+      handleError(error)
     } finally {
       setIsLoading(false)
     }
   }, [])
 
-  const getLocalStorageBookmarks = () => {
-    const bookmarksLocalStorage = localStorage.getItem('bookmarks')
-    return bookmarksLocalStorage || "{}"
-  }
-
-  const isBookmarked = (props: GetBookmarkDto) => {
-    const { flightId } = props;
-    const bookmarksObject = JSON.parse(getLocalStorageBookmarks() || "{}");
-    return !(bookmarksObject[flightId] !== 0 &&
-      (bookmarksObject[flightId] === null ||
-        bookmarksObject[flightId] === undefined));
-  }
-
-  const getBookmarks = async () => {
+  const getBookmarks = useCallback(async () => {
     try {
-      const bookmarksReturned = await BookmarksService.getBookmarks()
-      setBookmarks(JSON.stringify(bookmarksReturned))
-      localStorage.setItem('bookmarks', JSON.stringify(bookmarksReturned))
+      const { flightIds = [] } = await BookmarksService.getBookmarks()
+      const bookmarkedFlights = flights.filter((flight) =>
+        flightIds.includes(flight.id),
+      )
+      setBookmarkedFlights(bookmarkedFlights)
     } catch (error) {
-      console.error('error:' + error)
-      setHasApiError(true)
-    } finally {
-      setIsLoading(false)
+      handleError(error)
     }
-  }
+  }, [flights])
 
-  const postBookmark = async (props: PostBookmarkDto) => {
+  const updateBookmarks = useCallback(
+    (flight: RequestFlightDto, isAdding: boolean) => {
+      setBookmarkedFlights((prev) =>
+        isAdding
+          ? [...prev, flight]
+          : prev.filter((bookmarked) => bookmarked.id !== flight.id),
+      )
+    },
+    [],
+  )
+
+  const toggleBookmark = async (flightId: number) => {
     try {
       setIsLoading(true)
-      const { flightId } = props;
-      await BookmarksService.postBookmarks({ flightId: flightId })
-      const bookmarks = await BookmarksService.getBookmarks()
-      setBookmarks(JSON.stringify(bookmarks))
-    } catch (error) {
-      console.error('error:' + error)
-      setHasApiError(true)
-    } finally {
-      setIsLoading(false)
-    }
-  }
 
-  const deleteBookmark = async (props: PostBookmarkDto) => {
-    try {
-      setIsLoading(true)
-      const { flightId } = props;
-      await BookmarksService.deleteBookmarks({ flightId: flightId })
-      const bookmarks = await BookmarksService.getBookmarks()
-      setBookmarks(JSON.stringify(bookmarks))
-    } catch (error) {
-      console.error('error:' + error)
-      setHasApiError(true)
-    } finally {
-      setIsLoading(false)
-    }
-  }
+      const flight = flights.find((f) => f.id === flightId)
 
-  const toogleBookmarkFlight = (props: GetBookmarkDto) => {
-    try {
-      const {flightId} = props;
-      if(isBookmarked({flightId: flightId})) {
-        deleteBookmark({flightId: flightId})
+      if (!flight) throw new Error('Voo não encontrado')
+
+      const isBookmarked = bookmarkedFlights.some((f) => f.id === flightId)
+
+      if (isBookmarked) {
+        await BookmarksService.deleteBookmarks({ flightId })
       } else {
-        postBookmark({flightId:flightId})
+        await BookmarksService.postBookmarks({ flightId })
       }
-    } catch (error) {
-      
-    } finally {
 
+      updateBookmarks(flight, !isBookmarked)
+    } catch (error) {
+      handleError(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  const onFilter = async (data: FilterFormData) => {
-    const { origin, destination, departure, arrival } = data
+  const onFilter = (data: FilterFormData) => setFilter(data)
 
-    setFilter({
-      origin,
-      destination,
-      departure,
-      arrival,
-    })
-  }
-
-  const onFilterReset = async () => {
-    setFilter({
-      origin: '',
-      destination: '',
-      departure: '',
-      arrival: '',
-    })
-  }
+  const onFilterReset = () =>
+    setFilter({ origin: '', destination: '', departure: '', arrival: '' })
 
   const filterFlights = useCallback(() => {
-    // Check if any filter is applied
-    const hasActiveFilters =
-      filter.origin || filter.destination || filter.departure || filter.arrival
+    const hasActiveFilters = Object.values(filter).some(Boolean)
 
     if (!hasActiveFilters) {
       setFilteredFlights(flights)
       return
     }
 
-    const filteredFlights = flights.filter((flight) => {
-      const originMatch = !filter.origin || flight.origin === filter.origin
-      const destinationMatch =
-        !filter.destination || flight.destination === filter.destination
-      const departureMatch =
-        !filter.departure || flight.departureDateTime === filter.departure
-      const arrivalMatch =
-        !filter.arrival || flight.arrivalDateTime === filter.arrival
+    const filtered = flights.filter(
+      (flight) =>
+        (!filter.origin || flight.origin === filter.origin) &&
+        (!filter.destination || flight.destination === filter.destination) &&
+        (!filter.departure || flight.departureDateTime === filter.departure) &&
+        (!filter.arrival || flight.arrivalDateTime === filter.arrival),
+    )
 
-      return originMatch && destinationMatch && departureMatch && arrivalMatch
-    })
-
-    setFilteredFlights(filteredFlights)
+    setFilteredFlights(filtered)
   }, [flights, filter])
 
   useEffect(() => {
     getFlights()
   }, [getFlights])
-  
+
   useEffect(() => {
-    getBookmarks()
-  }, [getBookmarks])
+    if (flights.length > 0) getBookmarks()
+  }, [flights, getBookmarks])
 
   useEffect(() => {
     filterFlights()
@@ -177,12 +131,11 @@ export const useFlight = () => {
   return {
     flights,
     filteredFlights,
+    bookmarkedFlights,
     isLoading,
     hasApiError,
-    bookmarks,
     onFilter,
     onFilterReset,
-    isBookmarked,
-    toogleBookmarkFlight
+    onToogleBookmarkFlight: toggleBookmark,
   }
 }
