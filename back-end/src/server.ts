@@ -8,7 +8,7 @@ const server = express();
 
 await connectRedis().catch(console.error);
 server.use(bodyParser.json());
-server.use('/api', app);
+server.use('/', app);
 
 server.listen(PORT, () => {
   console.log('Back-end running on port', PORT);
