@@ -1,5 +1,5 @@
 export type RequestBookmarkDto = {
-  [key: string] : string
+  flightIds: number[]
 }
 
 export type PostBookmarkDto = {
