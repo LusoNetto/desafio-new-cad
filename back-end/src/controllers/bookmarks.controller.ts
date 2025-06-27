@@ -7,7 +7,7 @@ import { handleServerError } from '../utils/errorHandler';
 
 const SEVEN_DAYS_IN_SECONDS = 604800;
 
-export const getBookmarks = async (req: Request, res: Response) => {
+export const getBookmarks = async (_req: Request, res: Response) => {
   try {
     const bookmarks = await client.get('bookmarks');
     res.status(StatusCodes.OK).json(bookmarks ? JSON.parse(bookmarks) : {});
