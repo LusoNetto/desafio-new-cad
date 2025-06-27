@@ -3,6 +3,7 @@ export type FilterDataType = {
   destination: string
   departure: string
   arrival: string
+  search?: string // novo campo para busca por texto
 }
 
 export type FilterProps = {

@@ -12,8 +12,9 @@ export const Bookmarks = () => {
     hasApiError,
     isLoading,
     bookmarkedFlights,
-    onFilter,
-    onFilterReset,
+    filteredBookmarkedFlights,
+    filterBookmarkedFlights,
+    onBookmarksFilterReset,
     onToogleBookmarkFlight,
   } = useFlight()
 
@@ -23,10 +24,10 @@ export const Bookmarks = () => {
         <GenericError message="Ocorreu um erro ao carregar os voos." />
       )}
 
-      <Filter onFilter={onFilter} onFilterReset={onFilterReset} />
+      <Filter onFilter={filterBookmarkedFlights} onFilterReset={onBookmarksFilterReset} />
 
       <FlightsList
-        flights={bookmarkedFlights}
+        flights={filteredBookmarkedFlights}
         bookmarkedFlights={bookmarkedFlights}
         onToogleBookmarkFlight={onToogleBookmarkFlight}
       />
