@@ -10,7 +10,33 @@ Este diretório contém o back-end da aplicação, desenvolvido em Node.js, Expr
 - Mock de Redis para testes
 - Separação de camadas (controllers, services, DTOs, middlewares)
 
-## Como rodar
+## Como rodar o projeto
+
+1. Instale as dependências:
+
+```bash
+npm install
+```
+
+2. Configure variáveis de ambiente criando um arquivo `.env` na raiz, se necessário:
+
+```
+PORT=3000
+CORS_ORIGIN=http://localhost:5173
+NODE_ENV=development
+```
+
+3. Rode o servidor em modo desenvolvimento:
+
+```bash
+npm run dev
+```
+
+4. Acesse a API no navegador ou via ferramentas como Postman:
+
+```
+http://localhost:3000
+```
 
 ### Pré-requisitos
 - Node.js >= 18
@@ -29,17 +55,6 @@ Este diretório contém o back-end da aplicação, desenvolvido em Node.js, Expr
    O Redis estará rodando na porta padrão 6379.
 
 > Dica: Para rodar o Redis em segundo plano, use um terminal separado ou configure como serviço.
-
-### Instalação
-```bash
-npm install
-```
-
-### Rodando o servidor
-```bash
-npm run dev
-```
-O servidor estará disponível em `http://localhost:3000`.
 
 ### Testes
 ```bash
