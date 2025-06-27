@@ -5,7 +5,6 @@ export const FilterContainer = styled.div`
   flex-direction: column;
   gap: 1rem;
 
-  margin-top: 2rem;
   padding: 1.5rem;
   border-radius: 0.5rem;
 

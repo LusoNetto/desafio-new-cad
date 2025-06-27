@@ -13,7 +13,8 @@ type FilterFormData = {
   arrival: string
 }
 
-export const useFlight = () => {
+export const useBookmark = () => {
+
   const [filteredFlights, setFilteredFlights] = useState(
     [] as RequestFlightDto[],
   )
@@ -37,7 +38,7 @@ export const useFlight = () => {
 
       const flights = await FlightsService.getFlights()
 
-      setFlights(flights)
+      setFlights(flights.filter((flight) => isBookmarked({flightId: flight.flightNumber})))
     } catch (error) {
       console.error('error:' + error)
       setHasApiError(true)

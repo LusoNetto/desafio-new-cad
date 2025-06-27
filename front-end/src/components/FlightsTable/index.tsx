@@ -1,15 +1,17 @@
-import type { FlightType } from '../../pages/Flights/types'
-import Loading from '../Loading/Loading'
-import { api } from '../../api/core/axios-api'
 import { useEffect } from 'react'
+import { CiStar } from 'react-icons/ci'
+import { FaStar } from 'react-icons/fa6'
+
+import { api } from '../../api/core/axios-api'
 import { useFlight } from '../../pages/Flights/useFlight'
+
+import Loading from '../Loading/Loading'
 import { Table } from '../Table/Table'
 import { Response } from '../Response/Response'
-import { FaStar } from 'react-icons/fa6'
-import { CiStar } from 'react-icons/ci'
 
 // TYPES
 import type { FlightsTableProps } from './types'
+import type { FlightType } from '../../pages/Flights/types'
 
 export const FlightsTable = (props: FlightsTableProps) => {
   const { isLoading, heads, rows, bookmarks, setBookmarks } = props

@@ -1,77 +1,15 @@
-import { useForm } from 'react-hook-form'
-import { convertDataBaseDateToFormDate } from '../../utils/dateConverter'
-import type { FlightType } from '../../pages/Flights/types'
-import { api } from '../../api/core/axios-api'
-import { useFlight } from '../../pages/Flights/useFlight'
-import { Button } from '../Button/Button'
-import { SubmitConteiner } from '../SubmitConteiner/SubmitConteiner'
-
 // STYLES
 import * as S from './styles'
 
 // TYPES
 import type { FilterProps, FilterDataType } from './types'
 import { MagnifyingGlass, Trash } from 'phosphor-react'
+import { useForm } from 'react-hook-form'
 
 export const Filter = (props: FilterProps) => {
-  const { setIsLoading, setFlights, setHasErrorApi, inBookmarksPage } = props
+  const { onFilter, onFilterReset } = props
 
-  const { register, handleSubmit } = useForm()
-  const { hasBookmark } = useFlight()
-
-  const onFilter = async (data: FilterDataType) => {
-    const { origin, destination, departure, arrival, search } = data
-    console.log(origin, destination, departure, arrival, search)
-    setIsLoading(true)
-    await api
-      .get('/flights')
-      .then((response) => {
-        setIsLoading(false)
-        const filteredFlights = response.data.filter(
-          (flight: FlightType) =>
-            flight.origin === origin ||
-            flight.origin === origin ||
-            flight.destination === destination ||
-            convertDataBaseDateToFormDate(flight.departureDateTime) ===
-              departure ||
-            convertDataBaseDateToFormDate(flight.arrivalDateTime) === arrival ||
-            search === flight.flightNumber.toString() ||
-            search === flight.company ||
-            search === flight.origin ||
-            search === flight.destination ||
-            search ===
-              new Date(flight.departureDateTime).toLocaleDateString() ||
-            search === new Date(flight.arrivalDateTime).toLocaleDateString() ||
-            search === flight.price,
-        )
-        console.log(filteredFlights)
-        setFlights(filteredFlights)
-      })
-      .catch((err) => {
-        setHasErrorApi(true)
-        console.error('error:' + err)
-      })
-  }
-
-  const onResetTable = async () => {
-    setIsLoading(true)
-    await api
-      .get('/flights')
-      .then((response) => {
-        setIsLoading(false)
-        if (inBookmarksPage) {
-          setFlights(
-            response.data.filter((row: FlightType) => hasBookmark(row.id)),
-          )
-        } else {
-          setFlights(response.data)
-        }
-      })
-      .catch((err) => {
-        setHasErrorApi(true)
-        console.error('error:' + err)
-      })
-  }
+  const { register, handleSubmit } = useForm<FilterDataType>()
 
   return (
     <S.FilterContainer>
@@ -118,24 +56,21 @@ export const Filter = (props: FilterProps) => {
           </S.InputContainer>
 
           <S.InputContainer>
-            <S.Label>Partida:</S.Label>
+            <S.Label>Partida em:</S.Label>
             <S.Input type="date" {...register('departure')} />
           </S.InputContainer>
 
           <S.InputContainer>
-            <S.Label>Chegada:</S.Label>
+            <S.Label>Chegada em:</S.Label>
             <S.Input type="date" {...register('arrival')} />
           </S.InputContainer>
 
-          <S.Button
-            type="submit"
-            onClick={handleSubmit((data) => onFilter(data as FilterDataType))}
-          >
+          <S.Button type="submit" onClick={handleSubmit(onFilter)}>
             <MagnifyingGlass size={18} />
             Buscar
           </S.Button>
 
-          <S.ResetButton type="button" onClick={onResetTable}>
+          <S.ResetButton type="button" onClick={onFilterReset}>
             <Trash size={18} />
           </S.ResetButton>
         </S.InputsContainer>

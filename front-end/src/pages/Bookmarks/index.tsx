@@ -2,14 +2,14 @@
 import { Filter, FlightsList, GenericError, ScreenLoader } from '@/components'
 
 // HOOKS
-import { useFlight } from './useFlight'
+import {useBookmark} from "./useBookmark"
 
 // STYLES
 import * as S from './styles'
 
-export const Flights = () => {
+export const Bookmarks = () => {
   const { filteredFlights, hasApiError, isLoading, onFilter, onFilterReset } =
-    useFlight()
+    useBookmark();
 
   return (
     <S.FlightsContainer>
@@ -25,5 +25,3 @@ export const Flights = () => {
     </S.FlightsContainer>
   )
 }
-
-export { useFlight }
