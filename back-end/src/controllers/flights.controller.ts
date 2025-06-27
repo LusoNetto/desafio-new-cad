@@ -14,7 +14,7 @@ export const getFlights = (req: Request, res: Response) => {
   try {
     const parseResult = flightsQuerySchema.safeParse(req.query);
     if (!parseResult.success) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
+      res.status(StatusCodes.BAD_REQUEST).json({
         message: 'Invalid query parameters',
         errors: parseResult.error.errors
       });
