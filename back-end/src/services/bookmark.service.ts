@@ -26,7 +26,7 @@ export const addBookmark = async (flightId: number) => {
 
 export const removeBookmark = async (flightId: number) => {
   const bookmarks = await getAllBookmarks();
-  if (!bookmarks[flightId]) {
+  if (!(flightId in bookmarks)) {
     return false;
   }
   delete bookmarks[flightId];

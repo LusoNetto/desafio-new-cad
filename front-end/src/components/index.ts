@@ -1,6 +1,4 @@
-export { FlightsTable } from './FlightsTable'
 export { Filter } from './Filter'
-export { Title } from './Title'
 export { Navbar } from './Navbar'
 export { GenericError } from './GenericError'
 export { FlightsList } from './FlightsList'
