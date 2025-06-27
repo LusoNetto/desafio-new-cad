@@ -18,7 +18,26 @@ export const swaggerDocument = {
     '/v1/bookmarks': {
       get: {
         summary: 'Get all bookmarks',
-        responses: { 200: { description: 'Bookmarks object' } },
+        responses: {
+          200: {
+            description: 'Bookmarks object',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    flightIds: {
+                      type: 'array',
+                      items: { type: 'number' },
+                      description: 'Array of bookmarked flight IDs'
+                    },
+                  },
+                  required: ['flightIds'],
+                },
+              },
+            },
+          },
+        },
       },
       post: {
         summary: 'Create a bookmark',
