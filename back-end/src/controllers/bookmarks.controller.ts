@@ -13,7 +13,7 @@ export const getBookmarks = async (req: Request, res: Response) => {
     res.status(StatusCodes.OK).json(bookmarks ? JSON.parse(bookmarks) : {});
     return;
   } catch (error) {
-    handleServerError(res, error, 'buscar bookmarks');
+    handleServerError(res, error, 'fetch bookmarks');
   }
 };
 
@@ -22,7 +22,7 @@ export const createBookmark = async (req: Request, res: Response) => {
     const parseResult = bookmarkBodySchema.safeParse(req.body);
     if (!parseResult.success) {
       res.status(StatusCodes.BAD_REQUEST).json({
-        message: 'Dados inválidos',
+        message: 'Invalid data',
         errors: parseResult.error.errors
       });
       return;
@@ -34,7 +34,7 @@ export const createBookmark = async (req: Request, res: Response) => {
 
     if (bookmarks[flightId]) {
       res.status(StatusCodes.CONFLICT).json({
-        message: `Bookmark com ID ${flightId} já existe`
+        message: `Bookmark with ID ${flightId} already exists`
       });
       return;
     }
@@ -46,7 +46,7 @@ export const createBookmark = async (req: Request, res: Response) => {
 
     res.status(StatusCodes.CREATED).json(flightId);
   } catch (error) {
-    handleServerError(res, error, 'criar bookmark');
+    handleServerError(res, error, 'create bookmark');
   }
 };
 
@@ -55,7 +55,7 @@ export const deleteBookmark = async (req: Request, res: Response) => {
     const parseResult = bookmarkParamsSchema.safeParse(req.params);
     if (!parseResult.success) {
       res.status(StatusCodes.BAD_REQUEST).json({
-        message: 'Parâmetro inválido',
+        message: 'Invalid parameter',
         errors: parseResult.error.errors
       });
       return;
@@ -65,7 +65,7 @@ export const deleteBookmark = async (req: Request, res: Response) => {
     const bookmarksData = await client.get('bookmarks');
     if (!bookmarksData) {
       res.status(StatusCodes.NOT_FOUND).json({
-        message: 'Nenhum bookmark encontrado'
+        message: 'No bookmarks found'
       });
       return;
     }
@@ -73,7 +73,7 @@ export const deleteBookmark = async (req: Request, res: Response) => {
     const bookmarks = JSON.parse(bookmarksData);  
     if (!bookmarks[flightId]) {
       res.status(StatusCodes.NOT_FOUND).json({
-        message: `Bookmark com ID ${flightId} não encontrado`
+        message: `Bookmark with ID ${flightId} not found`
       });
       return;
     }
@@ -82,9 +82,9 @@ export const deleteBookmark = async (req: Request, res: Response) => {
     await client.set('bookmarks', JSON.stringify(bookmarks));
 
     res.status(StatusCodes.OK).json({ 
-      message: 'Bookmark deletado com sucesso' 
+      message: 'Bookmark deleted successfully' 
     });
   } catch (error) {
-    handleServerError(res, error, 'deletar bookmark');
+    handleServerError(res, error, 'delete bookmark');
   }
 };
