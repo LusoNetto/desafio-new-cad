@@ -5,7 +5,7 @@ export const swaggerDocument = {
     version: '1.0.0',
   },
   paths: {
-    '/v1/flights': {
+    '/api/v1/flights': {
       get: {
         summary: 'Get all flights',
         responses: {
@@ -15,10 +15,29 @@ export const swaggerDocument = {
         },
       },
     },
-    '/v1/bookmarks': {
+    '/api/v1/bookmarks': {
       get: {
         summary: 'Get all bookmarks',
-        responses: { 200: { description: 'Bookmarks object' } },
+        responses: {
+          200: {
+            description: 'Object with array of bookmarked flight IDs',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    flightIds: {
+                      type: 'array',
+                      items: { type: 'number' },
+                      description: 'Array of bookmarked flight IDs',
+                    },
+                  },
+                  required: ['flightIds'],
+                },
+              },
+            },
+          },
+        },
       },
       post: {
         summary: 'Create a bookmark',
@@ -33,7 +52,7 @@ export const swaggerDocument = {
         responses: { 201: { description: 'Bookmark created' }, 409: { description: 'Already exists' } },
       },
     },
-    '/v1/bookmarks/{flightId}': {
+    '/api/v1/bookmarks/{flightId}': {
       delete: {
         summary: 'Delete a bookmark',
         parameters: [
